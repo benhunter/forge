@@ -139,6 +139,7 @@ public abstract class SpellAbilityAi {
     /**
      * Checks if the AI will play a SpellAbility with the specified AiLogic
      */
+    // TODO aiLogic comes from sa, use it from there instead of separately? maybe useful to split for testing, but not normal...
     protected boolean checkAiLogic(final Player ai, final SpellAbility sa, final String aiLogic) {
         if ("Never".equals(aiLogic)) {
             return false;

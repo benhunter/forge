@@ -32,6 +32,7 @@ public class AITest {
 
     public Game resetGame() {
         // need to be done after FModel.initialize, or the Localizer isn't loaded yet
+        // TODO assert Localizer is loaded
         List<RegisteredPlayer> players = Lists.newArrayList();
         Deck d1 = new Deck();
         players.add(new RegisteredPlayer(d1).setPlayer(new LobbyPlayerAi("p2", null)));
@@ -112,6 +113,7 @@ public class AITest {
         return c;
     }
 
+    // TODO remove, force use of addCardToZone
     protected Card addCard(String name, Player p) {
         return addCardToZone(name, p, ZoneType.Battlefield);
     }

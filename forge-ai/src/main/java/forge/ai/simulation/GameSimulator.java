@@ -85,6 +85,7 @@ public class GameSimulator {
         ((PlayerControllerAi) aiPlayer.getController()).getAi().getSimulationPicker().setInterceptor(interceptor);
     }
 
+    // TODO extract to utils somewhere
     private void printDiff(List<String> lines1, List<String> lines2) {
         int i = 0;
         int j = 0;
