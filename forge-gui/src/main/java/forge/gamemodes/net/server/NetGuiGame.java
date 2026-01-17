@@ -195,10 +195,10 @@ public class NetGuiGame extends AbstractGuiGame {
         send(ProtocolMethod.refreshField);
     }
 
-    @Override
-    public GameState getGamestate() {
-        return null;
-    }
+//    @Override
+//    public GameState getGamestate() {
+//        return null;
+//    }
 
     @Override
     public SpellAbilityView getAbilityToPlay(final CardView hostCard, final List<SpellAbilityView> abilities, final ITriggerEvent triggerEvent) {

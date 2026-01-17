@@ -620,10 +620,10 @@ public final class CMatchUI
         });
     }
 
-    @Override
-    public GameState getGamestate() {
-        return null;
-    }
+//    @Override
+//    public GameState getGamestate() {
+//        return null;
+//    }
 
     @Override
     public List<JMenu> getMenus() {

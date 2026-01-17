@@ -2549,15 +2549,15 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             getGame().getAction().invoke(() -> abMana.produceMana(null));
         }
 
-        @Override
+//        @Override
         public void rollbackPhase() {
             final Player pPriority = getGame().getPhaseHandler().getPriorityPlayer();
             if (pPriority == null) {
                 getGui().message(localizer.getMessage("lblNoPlayerPriorityGameStateCannotBeSetup"));
                 return;
             }
-            if (getGui().getGamestate() != null)
-                getGui().getGamestate().applyToGame(getGame());
+//            if (getGui().getGamestate() != null)
+//                getGui().getGamestate().applyToGame(getGame());
         }
 
         private GameState createGameStateObject() {

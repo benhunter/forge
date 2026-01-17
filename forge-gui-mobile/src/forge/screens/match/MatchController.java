@@ -148,10 +148,10 @@ public class MatchController extends AbstractGuiGame {
         refreshCardDetails(null);
     }
 
-    @Override
-    public GameState getGamestate() {
-        return getPhaseGameState();
-    }
+//    @Override
+//    public GameState getGamestate() {
+//        return getPhaseGameState();
+//    }
 
     public boolean hotSeatMode() {
         return FModel.getPreferences().getPrefBoolean(FPref.MATCH_HOT_SEAT_MODE);

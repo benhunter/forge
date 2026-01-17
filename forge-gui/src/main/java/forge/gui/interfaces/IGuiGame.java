@@ -1,7 +1,7 @@
 package forge.gui.interfaces;
 
 import forge.LobbyPlayer;
-import forge.ai.GameState;
+//import forge.ai.GameState; // TODO: should come from forge.game
 import forge.deck.CardPool;
 import forge.game.GameEntityView;
 import forge.game.GameView;
@@ -98,7 +98,7 @@ public interface IGuiGame {
 
     void refreshField();
 
-    GameState getGamestate();
+//    GameState getGamestate();
 
     void updateManaPool(Iterable<PlayerView> manaPoolUpdate);
 
