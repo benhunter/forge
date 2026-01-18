@@ -14,14 +14,13 @@ import java.util.Set;
  */
 public class LobbyPlayerAiSimple extends LobbyPlayer implements IGameEntitiesFactory {
 
-    public LobbyPlayerAiSimple(String name) {
+//    public LobbyPlayerAiSimple(String name) {
+//        super(name);
+//    }
+
+    public LobbyPlayerAiSimple(String name, Set<AIOption> options) {
         super(name);
     }
-
-//    public LobbyPlayerAiSimple(String name, Set<AIOption> options) {
-//        super(name);
-//        //
-//    }
 
     public void setRotateProfileEachGame(boolean equals) {
     }
@@ -39,5 +38,9 @@ public class LobbyPlayerAiSimple extends LobbyPlayer implements IGameEntitiesFac
     @Override
     public Player createIngamePlayer(Game game, int id) {
         return null;
+    }
+
+    public void setAiProfile(String profile) {
+
     }
 }
