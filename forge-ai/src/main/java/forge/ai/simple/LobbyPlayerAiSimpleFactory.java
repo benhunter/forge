@@ -21,7 +21,9 @@ public class LobbyPlayerAiSimpleFactory extends LobbyPlayerAi implements IGameEn
         super(name);
     }
 
+    // TODO: does this belong in LobbyPlayerAi an abstract method?
     public void setRotateProfileEachGame(boolean equals) {
+        // Ignore
     }
 
     @Override

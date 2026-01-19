@@ -38,16 +38,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-// TODO: may need a common PlayerControllerAi class for other AIs to extend
-// TODO: Mulligan logic should go into a common interface:
+/**
+ * A simple AI player controller that implements minimal logic to demonstrate AI structure for testing and development. May be used as a base for more complex AIs.
+ *
+ * TODO: We may need a common PlayerControllerAi class for other AIs to extend.
+ * TODO: Mulligan logic should probably go into a common interface. The mulligan interface is unclear.
+ */
 public class PlayerControllerAiSimple extends PlayerController {
     public PlayerControllerAiSimple(Game game, Player player, LobbyPlayer lobbyPlayer) {
         super(game, player, lobbyPlayer);
     }
 
     @Override
+    public boolean isAI() {
+        return true;
+    }
+
+    @Override
     public SpellAbility getAbilityToPlay(Card hostCard, List<SpellAbility> abilities, ITriggerEvent triggerEvent) {
-        // TODO
         return null;
     }
 
@@ -98,13 +106,13 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public CardCollectionView choosePermanentsToSacrifice(SpellAbility sa, int min, int max, CardCollectionView validTargets, String message) {
-        // Always choose the first valid target
+        // Always choose the first valid target, zero when possible
         return (CardCollectionView) validTargets.subList(0, Math.min(min, validTargets.size()));
     }
 
     @Override
     public CardCollectionView choosePermanentsToDestroy(SpellAbility sa, int min, int max, CardCollectionView validTargets, String message) {
-        // Always choose the first valid target
+        // Always choose the first valid target, zero when possible
         return (CardCollectionView) validTargets.subList(0, Math.min(min, validTargets.size()));
     }
 
@@ -115,7 +123,6 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public TargetChoices chooseNewTargetsFor(SpellAbility ability, Predicate<GameObject> filter, boolean optional) {
-        // TODO
         return null;
     }
 
@@ -126,7 +133,6 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public Pair<SpellAbilityStackInstance, GameObject> chooseTarget(SpellAbility sa, List<Pair<SpellAbilityStackInstance, GameObject>> allTargets) {
-        // TODO
         return null;
     }
 
@@ -137,25 +143,21 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public Player choosePlayerToAssistPayment(FCollectionView<Player> optionList, SpellAbility sa, String title, int max) {
-        // TODO
         return null;
     }
 
     @Override
     public CardCollectionView chooseCardsForEffect(CardCollectionView sourceList, SpellAbility sa, String title, int min, int max, boolean isOptional, Map<String, Object> params) {
-        // TODO
         return null;
     }
 
     @Override
     public CardCollection chooseCardsForEffectMultiple(Map<String, CardCollection> validMap, SpellAbility sa, String title, boolean isOptional) {
-        // TODO
         return null;
     }
 
     @Override
     public <T extends GameEntity> T chooseSingleEntityForEffect(FCollectionView<T> optionList, DelayedReveal delayedReveal, SpellAbility sa, String title, boolean isOptional, Player relatedPlayer, Map<String, Object> params) {
-        // TODO
         return null;
     }
 
@@ -171,7 +173,6 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public SpellAbility chooseSingleSpellForEffect(List<SpellAbility> spells, SpellAbility sa, String title, Map<String, Object> params) {
-        // TODO
         return null;
     }
 
@@ -222,25 +223,22 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public CardCollection orderBlockers(Card attacker, CardCollection blockers) {
-        // TODO
         return null;
     }
 
     @Override
     public CardCollection orderBlocker(Card attacker, Card blocker, CardCollection oldBlockers) {
-        // TODO
         return null;
     }
 
     @Override
     public CardCollection orderAttackers(Card blocker, CardCollection attackers) {
-        // TODO
         return null;
     }
 
     @Override
     public void reveal(CardCollectionView cards, ZoneType zone, Player owner, String messagePrefix, boolean addMsgSuffix) {
-    // Don't care about revealed cards
+        // Don't care about revealed cards
     }
 
     @Override
@@ -250,18 +248,16 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public void notifyOfValue(SpellAbility saSource, GameObject realtedTarget, String value) {
-    // Don't care about notified values
+        // Don't care about notified values
     }
 
     @Override
     public ImmutablePair<CardCollection, CardCollection> arrangeForScry(CardCollection topN) {
-        // TODO
         return null;
     }
 
     @Override
     public ImmutablePair<CardCollection, CardCollection> arrangeForSurveil(CardCollection topN) {
-        // TODO
         return null;
     }
 
@@ -272,19 +268,16 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public CardCollectionView orderMoveToZoneList(CardCollectionView cards, ZoneType destinationZone, SpellAbility source) {
-        // TODO
         return null;
     }
 
     @Override
     public CardCollectionView chooseCardsToDiscardFrom(Player playerDiscard, SpellAbility sa, CardCollection validCards, int min, int max) {
-        // TODO
         return null;
     }
 
     @Override
     public CardCollectionView chooseCardsToDiscardUnlessType(int min, CardCollectionView hand, String param, SpellAbility sa) {
-        // TODO
         return null;
     }
 
@@ -302,7 +295,6 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public CardCollectionView chooseCardsToDelve(int genericAmount, CardCollection grave) {
-        // TODO
         return null;
     }
 
@@ -318,7 +310,6 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public CardCollectionView chooseCardsToRevealFromHand(int min, int max, CardCollectionView valid) {
-        // TODO
         return null;
     }
 
@@ -335,13 +326,11 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public PlayerZone chooseStartingHand(List<PlayerZone> zones) {
-        // TODO
         return null;
     }
 
     @Override
     public Mana chooseManaFromPool(List<Mana> manaChoices) {
-        // TODO
         return null;
     }
 
@@ -367,7 +356,6 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public PlanarDice choosePDRollToIgnore(List<PlanarDice> rolls) {
-        // TODO
         return null;
     }
 
@@ -388,7 +376,6 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public RollDiceEffect.DieRollResult chooseRollToSwap(List<RollDiceEffect.DieRollResult> rolls) {
-        // TODO
         return null;
     }
 
@@ -399,7 +386,17 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public Object vote(SpellAbility sa, String prompt, List<Object> options, ListMultimap<Object, Player> votes, Player forPlayer, boolean optional) {
-        // TODO
+        // If optional, return null to abstain
+        // Otherwise, return the first option
+        if (optional) {
+            return null;
+        }
+        if (options == null) {
+            throw new IllegalArgumentException("options cannot be null");
+        }
+        if (!options.isEmpty()) {
+            return options.get(0);
+        }
         return null;
     }
 
@@ -411,8 +408,6 @@ public class PlayerControllerAiSimple extends PlayerController {
     @Override
     public CardCollectionView tuckCardsViaMulligan(Player mulliganingPlayer, int cardsToReturn) {
         return new CardCollection(); // never mulligan
-//        CardCollectionView hand = mulliganingPlayer.getCardsIn(ZoneType.Hand);
-//        return hand;
     }
 
     @Override
@@ -478,25 +473,21 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public ColorSet chooseColors(String message, SpellAbility sa, int min, int max, ColorSet options) {
-        // TODO
         return null;
     }
 
     @Override
     public ICardFace chooseSingleCardFace(SpellAbility sa, String message, Predicate<ICardFace> cpp, String name) {
-        // TODO
         return null;
     }
 
     @Override
     public ICardFace chooseSingleCardFace(SpellAbility sa, List<ICardFace> faces, String message) {
-        // TODO
         return null;
     }
 
     @Override
     public CardState chooseSingleCardState(SpellAbility sa, List<CardState> states, String message, Map<String, Object> params) {
-        // TODO
         return null;
     }
 
@@ -507,7 +498,6 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public CounterType chooseCounterType(List<CounterType> options, SpellAbility sa, String prompt, Map<String, Object> params) {
-        // TODO
         return null;
     }
 
@@ -523,13 +513,11 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public ReplacementEffect chooseSingleReplacementEffect(List<ReplacementEffect> possibleReplacers) {
-        // TODO
         return null;
     }
 
     @Override
     public StaticAbility chooseSingleStaticAbility(String prompt, List<StaticAbility> possibleReplacers) {
-        // TODO
         return null;
     }
 
@@ -600,7 +588,6 @@ public class PlayerControllerAiSimple extends PlayerController {
 
     @Override
     public Card chooseSingleCardForZoneChange(ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal, String selectPrompt, boolean isOptional, Player decider) {
-        // TODO
         return null;
     }
 
