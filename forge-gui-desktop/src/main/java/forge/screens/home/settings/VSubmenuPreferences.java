@@ -999,6 +999,10 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
         return cbPreselectPrevAbOrder;
     }
 
+    public final JCheckBox getCbAiPicker() {
+        return cbAiPicker;
+    }
+
     public final FComboBoxPanel<String> getCbpGraveyardOrdering() {
         return cbpGraveyardOrdering;
     }
