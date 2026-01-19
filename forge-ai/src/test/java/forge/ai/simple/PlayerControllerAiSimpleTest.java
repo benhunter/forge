@@ -3,7 +3,6 @@ package forge.ai.simple;
 import forge.game.Game;
 import forge.game.card.CardCollection;
 import forge.game.card.CardCollectionView;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
