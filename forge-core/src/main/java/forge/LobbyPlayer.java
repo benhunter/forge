@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
-/** 
+/**
  * This means a player's part unchanged for all games.
  * 
  * May store player's assets here.
