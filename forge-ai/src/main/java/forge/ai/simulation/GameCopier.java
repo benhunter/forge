@@ -3,7 +3,7 @@ package forge.ai.simulation;
 import com.google.common.collect.*;
 import forge.LobbyPlayer;
 import forge.ai.AIOption;
-import forge.ai.LobbyPlayerAi;
+import forge.ai.stateMachine.LobbyPlayerAiAdvancedFsmFactory;
 import forge.card.CardRarity;
 import forge.card.CardRules;
 import forge.game.*;
@@ -204,9 +204,9 @@ public class GameCopier {
     private RegisteredPlayer clonePlayer(RegisteredPlayer p) {
         RegisteredPlayer clone = new RegisteredPlayer(p.getDeck());
         LobbyPlayer lp = p.getPlayer();
-        if (!(lp instanceof LobbyPlayerAi)) {
+        if (!(lp instanceof LobbyPlayerAiAdvancedFsmFactory)) {
             // TODO should probably also override them if they're normal AI
-            lp = new LobbyPlayerAi(p.getPlayer().getName(), Sets.newHashSet(AIOption.USE_SIMULATION));
+            lp = new LobbyPlayerAiAdvancedFsmFactory(p.getPlayer().getName(), Sets.newHashSet(AIOption.USE_SIMULATION));
         }
         clone.setPlayer(lp);
         return clone;

@@ -84,7 +84,18 @@ public class Localizer {
 
         try {
             //formatter = new MessageFormat(resourceBundle.getString(key.toLowerCase()), locale);
-            formatter = new MessageFormat(english || forcedEnglish ? englishBundle.getString(key) : resourceBundle.getString(key), english || forcedEnglish ? Locale.ENGLISH : locale);
+            if (english || forcedEnglish) {
+                if (englishBundle == null) {
+                    throw new MissingResourceException("English resource bundle not initialized", "ResourceBundle", key);
+                }
+                formatter = new MessageFormat(englishBundle.getString(key), Locale.ENGLISH);
+            }
+            else {
+                if (resourceBundle == null) {
+                    throw new MissingResourceException("Resource bundle not initialized", "ResourceBundle", key);
+                }
+                formatter = new MessageFormat(resourceBundle.getString(key), locale);
+            }
         } catch (final IllegalArgumentException | MissingResourceException e) {
             if (!silent)
                 e.printStackTrace();
