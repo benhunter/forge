@@ -336,8 +336,12 @@ public class Game {
             // If the Registered Player already has a pre-assigned ID, use that. Otherwise, assign a new one.
             Integer id = psc.getId();
             Player pl = factory.createIngamePlayer(this, id == null ? plId++ : id);
+            if (pl == null) {
+                String name = psc.getPlayer() != null ? psc.getPlayer().getName() : "Unknown";
+                throw new IllegalStateException("IGameEntitiesFactory.createIngamePlayer returned null for " + name);
+            }
             allPlayers.add(pl);
-            ingamePlayers.add(pl);
+            ingamePlayers.add(pl); // TODO: why call .add(pl) twice? these two collections seem redundant
 
             if (startingLife != -1) {
                 pl.setStartingLife(startingLife);

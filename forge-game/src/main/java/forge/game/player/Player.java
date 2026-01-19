@@ -75,10 +75,7 @@ import java.util.stream.Collectors;
  * @version $Id$
  */
 public class Player extends GameEntity implements Comparable<Player> {
-    public static final List<ZoneType> ALL_ZONES = Collections.unmodifiableList(Arrays.asList(ZoneType.Battlefield,
-            ZoneType.Library, ZoneType.Graveyard, ZoneType.Hand, ZoneType.Exile, ZoneType.Command, ZoneType.Ante,
-            ZoneType.Sideboard, ZoneType.PlanarDeck, ZoneType.SchemeDeck, ZoneType.AttractionDeck, ZoneType.ContraptionDeck,
-            ZoneType.Junkyard, ZoneType.Merged, ZoneType.Subgame, ZoneType.None));
+    public static final List<ZoneType> ALL_ZONES = List.of(ZoneType.Battlefield, ZoneType.Library, ZoneType.Graveyard, ZoneType.Hand, ZoneType.Exile, ZoneType.Command, ZoneType.Ante, ZoneType.Sideboard, ZoneType.PlanarDeck, ZoneType.SchemeDeck, ZoneType.AttractionDeck, ZoneType.ContraptionDeck, ZoneType.Junkyard, ZoneType.Merged, ZoneType.Subgame, ZoneType.None);
 
     private int life = 20;
     private int startingLife = 20;
