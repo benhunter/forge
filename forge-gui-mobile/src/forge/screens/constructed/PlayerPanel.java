@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableSet;
 import forge.Forge;
 import forge.Graphics;
 import forge.ai.AIOption;
+import forge.ai.AiProfileUtil;
 import forge.assets.FSkin;
 import forge.assets.FSkinFont;
 import forge.assets.FSkinImage;
@@ -66,6 +67,7 @@ public class PlayerPanel extends FContainer {
     private final FTextField txtPlayerName = new FTextField(Forge.getLocalizer().getMessage("lblPlayerName"));
     private final FToggleSwitch humanAiSwitch;
     private final FToggleSwitch devModeSwitch;
+    private final FComboBox<String> aiProfileCombo;
 
     private FComboBox<Object> cbTeam = new FComboBox<>();
     private FComboBox<Object> cbArchenemyTeam = new FComboBox<>();
@@ -90,16 +92,24 @@ public class PlayerPanel extends FContainer {
             humanAiSwitch = new FToggleSwitch(Forge.getLocalizer().getMessage("lblNotReady"), Forge.getLocalizer().getMessage("lblReady"));
         }
         else {
-            humanAiSwitch = new FToggleSwitch(Forge.getLocalizer().getMessage("lblHuman"), Forge.getLocalizer().getMessage("lblAI"));
+        humanAiSwitch = new FToggleSwitch(Forge.getLocalizer().getMessage("lblHuman"), Forge.getLocalizer().getMessage("lblAI"));
         }
         index = index0;
         populateTeamsComboBoxes();
         setTeam(slot.getTeam());
         setIsArchenemy(slot.isArchenemy());
+        aiProfileCombo = new FComboBox<>(AiProfileUtil.getProfilesArray());
+        aiProfileCombo.setLabel(Forge.getLocalizer().getMessage("cbpAiProfiles") + ": ");
+        aiProfileCombo.setChangedHandler(aiProfileChangedHandler);
+        final String defaultProfile = prefs.getPref(FPref.UI_CURRENT_AI_PROFILE);
+        if (AiProfileUtil.getProfilesDisplayList().contains(defaultProfile)) {
+            aiProfileCombo.setSelectedItem(defaultProfile);
+        }
         setType(slot.getType());
         setPlayerName(slot.getName());
         setAvatarIndex(slot.getAvatarIndex());
         setSleeveIndex(slot.getSleeveIndex());
+        setAiProfile(slot.getAiProfile());
 
         devModeSwitch = new FToggleSwitch(Forge.getLocalizer().getMessage("lblNormal"), Forge.getLocalizer().getMessage("lblDevMode"));
         devModeSwitch.setVisible(isNetworkHost());
@@ -225,6 +235,7 @@ public class PlayerPanel extends FContainer {
 
         humanAiSwitch.setChangedHandler(humanAiSwitched);
         add(humanAiSwitch);
+        add(aiProfileCombo);
 
         add(newLabel(Forge.getLocalizer().getMessage("lblTeam") + ":"));
         cbTeam.setChangedHandler(teamChangedHandler);
@@ -284,6 +295,7 @@ public class PlayerPanel extends FContainer {
             setMayEdit(false);
         }
         setMayControl(mayControl0);
+        updateAiProfileVisibility();
     }
 
     public void initialize(FPref savedStateSetting, FPref savedStateSettingCommander, FPref savedStateSettingOathbreaker, FPref savedStateSettingTinyLeader, FPref savedStateSettingBrawl, DeckType defaultDeckType) {
@@ -373,6 +385,10 @@ public class PlayerPanel extends FContainer {
             humanAiSwitch.setPosition(x, y);
         }
 
+        if (aiProfileCombo.isVisible()) {
+            y += dy;
+            aiProfileCombo.setBounds(PADDING, y, width - 2 * PADDING, fieldHeight);
+        }
 
         if (devModeSwitch.isVisible()) {
             if(Forge.isLandscapeMode())
@@ -449,6 +465,9 @@ public class PlayerPanel extends FContainer {
             rows++;
         }
         if (devModeSwitch.isVisible()) {
+            rows++;
+        }
+        if (aiProfileCombo.isVisible()) {
             rows++;
         }
         return rows * (txtPlayerName.getHeight() + PADDING) + PADDING;
@@ -920,6 +939,7 @@ public class PlayerPanel extends FContainer {
         if (isAi != wasAi && deckChooser != null) {
             onIsAiChanged(isAi);
         }
+        updateAiProfileVisibility();
     }
 
     public Set<AIOption> getAiOptions() {
@@ -932,6 +952,24 @@ public class PlayerPanel extends FContainer {
     }
     public void setUseAiSimulation(final boolean useAiSimulation0) {
         useAiSimulation = useAiSimulation0;
+    }
+
+    public String getAiProfile() {
+        if (!isAi() || !prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER)) {
+            return "";
+        }
+        String selection = (String) aiProfileCombo.getSelectedItem();
+        return selection == null ? "" : selection;
+    }
+
+    public void setAiProfile(final String aiProfile) {
+        String profile = aiProfile;
+        if (profile == null || profile.isEmpty()) {
+            profile = prefs.getPref(FPref.UI_CURRENT_AI_PROFILE);
+        }
+        if (AiProfileUtil.getProfilesDisplayList().contains(profile)) {
+            aiProfileCombo.setSelectedItem(profile);
+        }
     }
 
     public int getTeam() {
@@ -971,6 +1009,7 @@ public class PlayerPanel extends FContainer {
         if (devModeSwitch != null) {
             devModeSwitch.setEnabled(mayEdit);
         }
+        aiProfileCombo.setEnabled(mayEdit);
         if(allowNetworking) {
             btnDeck.setEnabled(mayEdit);
             btnCommanderDeck.setEnabled(mayEdit);
@@ -998,6 +1037,19 @@ public class PlayerPanel extends FContainer {
         if (mayRemove == mayRemove0) { return; }
         mayRemove = mayRemove0;
     }
+
+    private void updateAiProfileVisibility() {
+        boolean show = isAi() && prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER);
+        aiProfileCombo.setVisible(show);
+        aiProfileCombo.setEnabled(show && mayEdit);
+    }
+
+    private final FEventHandler aiProfileChangedHandler = new FEventHandler() {
+        @Override
+        public void handleEvent(FEvent e) {
+            screen.firePlayerChangeListener(index);
+        }
+    };
 
     public FDeckChooser getDeckChooser() {
         return deckChooser;

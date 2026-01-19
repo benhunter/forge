@@ -25,17 +25,18 @@ public final class UpdateLobbyPlayerEvent implements NetEvent {
     private DeckSection section = null;
     private CardPool cards = null;
     private Set<AIOption> aiOptions = null;
+    private String aiProfile = null;
     private String AvatarVanguard = null;
     private String SchemeDeckName = null;
     private String PlanarDeckName = null;
     private String DeckName = null;
 
 
-    public static UpdateLobbyPlayerEvent create(final LobbySlotType type, final String name, final int avatarIndex, final int sleeveIndex, final int team, final boolean isArchenemy, final boolean isReady, final Set<AIOption> aiOptions) {
-        return new UpdateLobbyPlayerEvent(type, name, avatarIndex, sleeveIndex, team, isArchenemy, isReady, aiOptions);
+    public static UpdateLobbyPlayerEvent create(final LobbySlotType type, final String name, final int avatarIndex, final int sleeveIndex, final int team, final boolean isArchenemy, final boolean isReady, final Set<AIOption> aiOptions, final String aiProfile) {
+        return new UpdateLobbyPlayerEvent(type, name, avatarIndex, sleeveIndex, team, isArchenemy, isReady, aiOptions, aiProfile);
     }
-    public static UpdateLobbyPlayerEvent create(final LobbySlotType type, final String name, final int avatarIndex, final int sleeveIndex, final int team, final boolean isArchenemy, final boolean isReady, final boolean isDevMode, final Set<AIOption> aiOptions) {
-        return new UpdateLobbyPlayerEvent(type, name, avatarIndex, sleeveIndex, team, isArchenemy, isReady, isDevMode, aiOptions);
+    public static UpdateLobbyPlayerEvent create(final LobbySlotType type, final String name, final int avatarIndex, final int sleeveIndex, final int team, final boolean isArchenemy, final boolean isReady, final boolean isDevMode, final Set<AIOption> aiOptions, final String aiProfile) {
+        return new UpdateLobbyPlayerEvent(type, name, avatarIndex, sleeveIndex, team, isArchenemy, isReady, isDevMode, aiOptions, aiProfile);
     }
     public static UpdateLobbyPlayerEvent deckUpdate(final Deck deck) {
         return new UpdateLobbyPlayerEvent(deck);
@@ -103,7 +104,8 @@ public final class UpdateLobbyPlayerEvent implements NetEvent {
             final int team,
             final boolean isArchenemy,
             final boolean isReady,
-            final Set<AIOption> aiOptions) {
+            final Set<AIOption> aiOptions,
+            final String aiProfile) {
         this.type = type;
         this.name = name;
         this.avatarIndex = avatarIndex;
@@ -112,6 +114,7 @@ public final class UpdateLobbyPlayerEvent implements NetEvent {
         this.isArchenemy = isArchenemy;
         this.isReady = isReady;
         this.aiOptions = aiOptions;
+        this.aiProfile = aiProfile;
     }
 
     private UpdateLobbyPlayerEvent(
@@ -123,7 +126,8 @@ public final class UpdateLobbyPlayerEvent implements NetEvent {
             final boolean isArchenemy,
             final boolean isReady,
             final boolean isDevMode,
-            final Set<AIOption> aiOptions) {
+            final Set<AIOption> aiOptions,
+            final String aiProfile) {
         this.type = type;
         this.name = name;
         this.avatarIndex = avatarIndex;
@@ -133,6 +137,7 @@ public final class UpdateLobbyPlayerEvent implements NetEvent {
         this.isReady = isReady;
         this.isDevMode = isDevMode;
         this.aiOptions = aiOptions;
+        this.aiProfile = aiProfile;
     }
 
     @Override
@@ -174,6 +179,9 @@ public final class UpdateLobbyPlayerEvent implements NetEvent {
     }
     public Set<AIOption> getAiOptions() {
         return aiOptions == null ? null : Collections.unmodifiableSet(aiOptions);
+    }
+    public String getAiProfile() {
+        return aiProfile;
     }
     public String getAvatarVanguard() { return AvatarVanguard; }
     public String getSchemeDeckName() { return SchemeDeckName; }

@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableSet;
 
 import forge.Singletons;
 import forge.ai.AIOption;
+import forge.ai.AiProfileUtil;
 import forge.deck.DeckSection;
 import forge.game.GameType;
 import forge.gamemodes.match.LobbySlot;
@@ -76,6 +77,8 @@ public class PlayerPanel extends FPanel {
     private JCheckBoxMenuItem radioAiUseSimulation;
     private FRadioButton radioOpen;
     private FCheckBox chkReady;
+    private final FLabel aiProfileLabel;
+    private final FComboBox<String> aiProfileCombo;
 
     private final FComboBoxWrapper<Object> teamComboBox = new FComboBoxWrapper<>();
     private final FComboBoxWrapper<Object> aeTeamComboBox = new FComboBoxWrapper<>();
@@ -146,6 +149,16 @@ public class PlayerPanel extends FPanel {
         this.add(radioHuman, "gapright 5px");
         this.add(radioAi, "wrap");
 
+        aiProfileLabel = lobby.newLabel(localizer.getMessage("cbpAiProfiles") + ":");
+        aiProfileCombo = new FComboBox<>(AiProfileUtil.getProfilesArray());
+        aiProfileCombo.addActionListener(e -> lobby.firePlayerChangeListener(index));
+        final String defaultProfile = prefs.getPref(FPref.UI_CURRENT_AI_PROFILE);
+        if (AiProfileUtil.getProfilesDisplayList().contains(defaultProfile)) {
+            aiProfileCombo.setSelectedItem(defaultProfile);
+        }
+        this.add(aiProfileLabel, "w 90px, h 30px");
+        this.add(aiProfileCombo, "spanx 5, pushx, growx, wrap");
+
         this.add(lobby.newLabel(localizer.getMessage("lblTeam") + ":"), "w 40px, h 30px");
         populateTeamsComboBoxes();
 
@@ -199,6 +212,9 @@ public class PlayerPanel extends FPanel {
         this.type = slot == null ? LobbySlotType.LOCAL : slot.getType();
         this.setPlayerName(slot == null ? "" : slot.getName());
         this.setAvatarIndex(slot == null ? 0 : slot.getAvatarIndex());
+        if (slot != null) {
+            setAiProfile(slot.getAiProfile());
+        }
 
         update();
     }
@@ -244,6 +260,11 @@ public class PlayerPanel extends FPanel {
         radioHuman.setSelected(type == LobbySlotType.LOCAL);
         radioAi.setSelected(type == LobbySlotType.AI);
         radioOpen.setSelected(type == LobbySlotType.OPEN);
+
+        final boolean showAiProfile = type == LobbySlotType.AI && prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER);
+        aiProfileLabel.setVisible(showAiProfile);
+        aiProfileCombo.setVisible(showAiProfile);
+        aiProfileCombo.setEnabled(showAiProfile && mayEdit);
 
         updateVariantControlsVisibility();
     }
@@ -453,11 +474,29 @@ public class PlayerPanel extends FPanel {
                 ? ImmutableSet.of(AIOption.USE_SIMULATION)
                 : Collections.emptySet();
     }
+
+    public String getAiProfile() {
+        if (type != LobbySlotType.AI || !prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER)) {
+            return "";
+        }
+        final String selection = (String) aiProfileCombo.getSelectedItem();
+        return selection == null ? "" : selection;
+    }
     private boolean isSimulatedAi() {
         return radioAi.isSelected() && radioAiUseSimulation.isSelected();
     }
     public void setUseAiSimulation(final boolean useSimulation) {
         radioAiUseSimulation.setSelected(useSimulation);
+    }
+
+    public void setAiProfile(final String aiProfile) {
+        String profile = aiProfile;
+        if (profile == null || profile.isEmpty()) {
+            profile = prefs.getPref(FPref.UI_CURRENT_AI_PROFILE);
+        }
+        if (AiProfileUtil.getProfilesDisplayList().contains(profile)) {
+            aiProfileCombo.setSelectedItem(profile);
+        }
     }
 
     public boolean isArchenemy() {
