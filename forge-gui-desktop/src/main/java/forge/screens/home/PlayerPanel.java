@@ -77,6 +77,9 @@ public class PlayerPanel extends FPanel {
     private FRadioButton radioOpen;
     private FCheckBox chkReady;
 
+    private final FLabel aiPickerLabel = new FLabel.Builder().text("AI:").build(); // TODO: localize
+    private FComboBoxWrapper<Object> aiPickerComboBox = new FComboBoxWrapper<>();
+
     private final FComboBoxWrapper<Object> teamComboBox = new FComboBoxWrapper<>();
     private final FComboBoxWrapper<Object> aeTeamComboBox = new FComboBoxWrapper<>();
 
@@ -146,7 +149,18 @@ public class PlayerPanel extends FPanel {
         this.add(radioHuman, "gapright 5px");
         this.add(radioAi, "wrap");
 
-        this.add(lobby.newLabel(localizer.getMessage("lblTeam") + ":"), "w 40px, h 30px");
+        int cellY = 1;
+        if (prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER)) {
+
+            this.add(aiPickerLabel, "w 40px, h 30px");
+//            aiPickerLabel.setVisible(false);
+            populateAiPickerComboBox();
+            aiPickerComboBox.addTo(this, "h 30px, pushx, growx, wrap");
+//            aiPickerComboBox.setVisible(false);
+            cellY += 1;
+        }
+
+        this.add(lobby.newLabel(localizer.getMessage("lblTeam") + ":"), "cell 0 " + cellY +", sx 2, ax right, w 40px, h 30px");
         populateTeamsComboBoxes();
 
         // Set these before action listeners are added
@@ -155,17 +169,17 @@ public class PlayerPanel extends FPanel {
 
         teamComboBox.addActionListener(teamListener);
         aeTeamComboBox.addActionListener(teamListener);
-        teamComboBox.addTo(this, variantBtnConstraints + ", pushx, growx, gaptop 5px");
-        aeTeamComboBox.addTo(this, variantBtnConstraints + ", pushx, growx, gaptop 5px");
+        teamComboBox.addTo(this, variantBtnConstraints + ", cell 2 " + cellY + ", growx, gaptop 5px, wrap");
+        aeTeamComboBox.addTo(this, variantBtnConstraints + ", cell 2 " + cellY + ", growx, gaptop 5px, wrap");
 
         createReadyButton();
         if (allowNetworking) {
-            this.add(radioOpen, "cell 4 1, ax left, sx 2");
-            this.add(chkReady, "cell 5 1, ax left, sx 2, wrap");
+            this.add(radioOpen, "cell 4 4, ax left, sx 2");
+            this.add(chkReady, "cell 5 4, ax left, sx 2, wrap");
         }
 
-        this.add(deckLabel, variantBtnConstraints + ", cell 0 2, sx 2, ax right");
-        this.add(deckBtn, variantBtnConstraints + ", cell 2 2, pushx, growx, wmax 100%-153px, h 30px, spanx 4, wrap");
+        this.add(deckLabel, variantBtnConstraints + ", cell 0 5, sx 2, ax right");
+        this.add(deckBtn, variantBtnConstraints + ", cell 2 5, pushx, growx, wmax 100%-153px, h 30px, spanx 4, wrap");
 
         addHandlersDeckSelector();
 
@@ -219,6 +233,7 @@ public class PlayerPanel extends FPanel {
         txtPlayerName.setEnabled(mayEdit);
         txtPlayerName.setText(type == LobbySlotType.OPEN ? StringUtils.EMPTY : playerName);
         nameRandomiser.setEnabled(mayEdit);
+        aiPickerComboBox.setEnabled(mayEdit); // TODO Enable only for if pref UI_ENABLE_AI_PICKER is set
         teamComboBox.setEnabled(mayEdit);
         deckLabel.setVisible(mayEdit);
         deckBtn.setVisible(mayEdit);
@@ -507,6 +522,15 @@ public class PlayerPanel extends FPanel {
 
     public void focusOnAvatar() {
         avatarLabel.requestFocusInWindow();
+    }
+
+    private void populateAiPickerComboBox() {
+        aiPickerComboBox.removeAllItems();
+        final List<String> aiProfiles = List.of("Aggressive", "Defensive", "Random", "Balanced", "Combo", "ManaRamp"); // TODO load from AI profile manager
+        for (final String profile : aiProfiles) {
+            aiPickerComboBox.addItem(profile);
+        }
+        aiPickerComboBox.setEnabled(true);
     }
 
     private void populateTeamsComboBoxes() {
