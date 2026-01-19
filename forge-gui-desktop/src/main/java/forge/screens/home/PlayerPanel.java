@@ -1,5 +1,6 @@
 package forge.screens.home;
 
+import forge.ai.AiProfileUtil;
 import forge.deckchooser.FDeckChooser;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -151,12 +152,9 @@ public class PlayerPanel extends FPanel {
 
         int cellY = 1;
         if (prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER)) {
-
             this.add(aiPickerLabel, "w 40px, h 30px");
-//            aiPickerLabel.setVisible(false);
             populateAiPickerComboBox();
             aiPickerComboBox.addTo(this, "h 30px, pushx, growx, wrap");
-//            aiPickerComboBox.setVisible(false);
             cellY += 1;
         }
 
@@ -233,7 +231,11 @@ public class PlayerPanel extends FPanel {
         txtPlayerName.setEnabled(mayEdit);
         txtPlayerName.setText(type == LobbySlotType.OPEN ? StringUtils.EMPTY : playerName);
         nameRandomiser.setEnabled(mayEdit);
-        aiPickerComboBox.setEnabled(mayEdit); // TODO Enable only for if pref UI_ENABLE_AI_PICKER is set
+
+        aiPickerLabel.setVisible(prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER));
+        aiPickerComboBox.setVisible(prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER));
+        aiPickerComboBox.setEnabled(mayEdit);
+
         teamComboBox.setEnabled(mayEdit);
         deckLabel.setVisible(mayEdit);
         deckBtn.setVisible(mayEdit);
@@ -524,12 +526,17 @@ public class PlayerPanel extends FPanel {
         avatarLabel.requestFocusInWindow();
     }
 
+    /**
+     * Setup the AI Picker combo box with the known AI profiles.
+     * Default the combo box selection to the default value of FPref.UI_CURRENT_AI_PROFILE.
+     */
     private void populateAiPickerComboBox() {
         aiPickerComboBox.removeAllItems();
-        final List<String> aiProfiles = List.of("Aggressive", "Defensive", "Random", "Balanced", "Combo", "ManaRamp"); // TODO load from AI profile manager
+        final String[] aiProfiles = AiProfileUtil.getProfilesArray();
         for (final String profile : aiProfiles) {
             aiPickerComboBox.addItem(profile);
         }
+        aiPickerComboBox.setSelectedItem(FPref.UI_CURRENT_AI_PROFILE.getDefault());
         aiPickerComboBox.setEnabled(true);
     }
 
