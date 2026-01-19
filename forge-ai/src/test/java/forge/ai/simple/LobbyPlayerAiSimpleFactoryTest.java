@@ -1,18 +1,8 @@
 package forge.ai.simple;
 
-import forge.ai.PlayerControllerAi;
 import forge.game.Game;
-import forge.game.GameRules;
-import forge.game.GameType;
-import forge.game.Match;
 import forge.game.player.Player;
-import forge.game.player.PlayerController;
-import forge.game.player.RegisteredPlayer;
-import forge.util.Localizer;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.testng.Assert.*;
 
@@ -27,13 +17,13 @@ public class LobbyPlayerAiSimpleFactoryTest {
      */
     @Test
     public void createIngamePlayer_ShouldSucceed_WhenProvidedGameAndId() {
-        initializeLocalizer();
+        Helpers.initializeLocalizer();
 
         LobbyPlayerAiSimpleFactory factory = new LobbyPlayerAiSimpleFactory("TestAI", null);
         assertNotNull(factory);
         assertEquals(factory.getName(), "TestAI");
 
-        Game game = createGame();
+        Game game = Helpers.createGame();
 
         assertNotNull(factory.createIngamePlayer(game, 0));
     }
@@ -55,26 +45,17 @@ public class LobbyPlayerAiSimpleFactoryTest {
     @Test
     public void createIngamePlayer_ShouldThrowException_WhenIdIsNegative() {
         LobbyPlayerAiSimpleFactory factory = new LobbyPlayerAiSimpleFactory("TestAI", null);
-        Game game = createGame();
+        Game game = Helpers.createGame();
 
         IllegalStateException exception = expectThrows(IllegalStateException.class, () -> factory.createIngamePlayer(game, -1));
         assertEquals(exception.getMessage(), "Player id is negative");
     }
 
-    private Game createGame() {
-        // Create a dummy Game object to pass to the method
-        List<RegisteredPlayer> players = new ArrayList<>();
-        GameType gameType = GameType.Constructed;
-        GameRules rules = new GameRules(gameType);
-        Match match = new Match(rules, players, "Test Match");
-        return new Game(players, rules, match);
-    }
-
     @Test
     public void canStartGame() {
-        initializeLocalizer();
+        Helpers.initializeLocalizer();
         LobbyPlayerAiSimpleFactory factory = new LobbyPlayerAiSimpleFactory("TestAI", null);
-        Game game = createGame();
+        Game game = Helpers.createGame();
 
         Player player = factory.createIngamePlayer(game, 0);
         assertNotNull(player);
@@ -83,8 +64,10 @@ public class LobbyPlayerAiSimpleFactoryTest {
 
     }
 
-    private void initializeLocalizer() {
-        Localizer localizer = Localizer.getInstance();
-        localizer.initialize("en-US", "../forge-gui/res/languages/"); // TODO: remove bad hardcoded path
+    @Test
+    public void testSetRotateProfileEachGame() {
+        LobbyPlayerAiSimpleFactory factory = new LobbyPlayerAiSimpleFactory("TestAI", null);
+        factory.setRotateProfileEachGame(true);
+        factory.setRotateProfileEachGame(false);
     }
 }
