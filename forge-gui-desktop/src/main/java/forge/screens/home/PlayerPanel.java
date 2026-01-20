@@ -78,6 +78,8 @@ public class PlayerPanel extends FPanel {
     private FRadioButton radioOpen;
     private FCheckBox chkReady;
 
+    // AI picker
+    private String aiProfile;
     private final FLabel aiPickerLabel = new FLabel.Builder().text("AI:").build(); // TODO: localize
     private FComboBoxWrapper<Object> aiPickerComboBox = new FComboBoxWrapper<>();
 
@@ -155,8 +157,10 @@ public class PlayerPanel extends FPanel {
             this.add(aiPickerLabel, "w 40px, h 30px");
             populateAiPickerComboBox();
             aiPickerComboBox.addTo(this, "h 30px, pushx, growx, wrap");
+            aiPickerComboBox.addActionListener(aiPickerListener);
             cellY += 1;
         }
+        this.setAiProfile(slot.getAiProfile());
 
         this.add(lobby.newLabel(localizer.getMessage("lblTeam") + ":"), "cell 0 " + cellY +", sx 2, ax right, w 40px, h 30px");
         populateTeamsComboBoxes();
@@ -499,6 +503,7 @@ public class PlayerPanel extends FPanel {
         update();
     }
 
+    // TODO: dead code, no usages?
     public void setRemote(final boolean remote) {
         if (remote) {
             setType(LobbySlotType.REMOTE);
@@ -558,6 +563,22 @@ public class PlayerPanel extends FPanel {
             final Object selection = cb.getSelectedItem();
 
             if (null != selection) {
+                lobby.changePlayerFocus(index);
+                lobby.firePlayerChangeListener(index);
+            }
+        }
+    };
+
+    // TODO needs usage?
+    private final ActionListener aiPickerListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("******** DEBUG aiPickerListener");
+            final FComboBox<Object> comboBox = (FComboBox<Object>) e.getSource();
+            closeBtn.requestFocusInWindow();
+            final Object selection = comboBox.getSelectedItem();
+
+            if (selection != null) {
                 lobby.changePlayerFocus(index);
                 lobby.firePlayerChangeListener(index);
             }
@@ -869,5 +890,13 @@ public class PlayerPanel extends FPanel {
 
     void setDeckChooser(final FDeckChooser deckChooser) {
         this.deckChooser = deckChooser;
+    }
+
+    public void setAiProfile(String aiProfile) {
+        this.aiProfile = aiProfile;
+    }
+
+    public String getAiProfile() {
+        return aiProfile;
     }
 }
