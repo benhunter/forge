@@ -25,6 +25,7 @@ public final class LobbySlot implements Serializable {
     private String SchemeDeckName;
     private String PlanarDeckName;
     private String DeckName;
+    private String aiProfile;
 
     public LobbySlot(final LobbySlotType type, final String name, final int avatarIndex, final int sleeveIndex, final int team, final boolean isArchenemy, final boolean isReady, final Set<AIOption> aiOptions) {
         this.type = type;
@@ -39,6 +40,7 @@ public final class LobbySlot implements Serializable {
     }
 
     boolean apply(final UpdateLobbyPlayerEvent data) {
+        System.out.println("******** DEBUG apply aiProfile=" + data.getAiProfile());
         boolean changed = false;
         if (data.getType() != null) {
             setType(data.getType());
@@ -98,6 +100,9 @@ public final class LobbySlot implements Serializable {
             setDeckName(data.getDeckName());
             changed = true;
         }
+        if (data.getAiProfile() != null) {
+            setAiProfile(data.getAiProfile());
+        }
         return changed;
     }
 
@@ -105,7 +110,7 @@ public final class LobbySlot implements Serializable {
         return type;
     }
     public void setType(final LobbySlotType type) {
-        this.type = type;
+        this.type = type; // TODO: how does type get updated when use changes selection?
     }
 
     public String getName() {
@@ -181,4 +186,12 @@ public final class LobbySlot implements Serializable {
         this.aiOptions = aiOptions == null ? ImmutableSet.of() : ImmutableSet.copyOf(aiOptions);
     }
 
+    public String getAiProfile() {
+        return aiProfile;
+    }
+
+    public void setAiProfile(String aiProfile) {
+        System.out.println("********* DEBUG setAiProfile()= " + aiProfile);
+        this.aiProfile = aiProfile;
+    }
 }

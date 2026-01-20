@@ -857,6 +857,12 @@ public abstract class LobbyScreen extends LaunchScreen implements ILobbyView {
         updateDeck(index);
         //fireReady(index, playerPanels.get(index).isReady());
     }
+
+    void updateAiProfile(int index, String aiProfile) {
+        if (playerChangeListener != null) {
+            playerChangeListener.update(index, UpdateLobbyPlayerEvent.aiProfileUpdate(aiProfile));
+        }
+    }
     public void removePlayer(final int index) {
         lobby.removeSlot(index);
     }
@@ -866,7 +872,16 @@ public abstract class LobbyScreen extends LaunchScreen implements ILobbyView {
 
     private UpdateLobbyPlayerEvent getSlot(final int index) {
         final PlayerPanel panel = playerPanels.get(index);
-        return UpdateLobbyPlayerEvent.create(panel.getType(), panel.getPlayerName(), panel.getAvatarIndex(), panel.getSleeveIndex(), panel.getTeam(), panel.isArchenemy(), panel.isReady(), panel.isDevMode(), panel.getAiOptions());
+        return UpdateLobbyPlayerEvent.create(panel.getType(),
+                panel.getPlayerName(),
+                panel.getAvatarIndex(),
+                panel.getSleeveIndex(),
+                panel.getTeam(),
+                panel.isArchenemy(),
+                panel.isReady(),
+                panel.isDevMode(),
+                panel.getAiOptions(),
+                panel.getAiProfile());
     }
 
     public List<PlayerPanel> getPlayerPanels() {
