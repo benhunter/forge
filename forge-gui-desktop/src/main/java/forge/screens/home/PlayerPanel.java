@@ -579,6 +579,7 @@ public class PlayerPanel extends FPanel {
             final Object selection = comboBox.getSelectedItem();
 
             if (selection != null) {
+                setAiProfile(selection.toString());
                 lobby.changePlayerFocus(index);
                 lobby.firePlayerChangeListener(index);
             }
@@ -894,9 +895,16 @@ public class PlayerPanel extends FPanel {
 
     public void setAiProfile(String aiProfile) {
         this.aiProfile = aiProfile;
+        if (aiProfile != null) {
+            aiPickerComboBox.setSelectedItem(aiProfile);
+        }
     }
 
     public String getAiProfile() {
+        final Object selection = aiPickerComboBox.getSelectedItem();
+        if (selection != null) {
+            return selection.toString();
+        }
         return aiProfile;
     }
 }
