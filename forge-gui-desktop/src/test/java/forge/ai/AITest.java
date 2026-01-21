@@ -7,7 +7,6 @@ import com.google.common.collect.Lists;
 
 import forge.GuiDesktop;
 import forge.StaticData;
-import forge.ai.stateMachine.LobbyPlayerAiAdvancedFsmFactory;
 import forge.deck.Deck;
 import forge.game.Game;
 import forge.game.GameRules;
@@ -35,8 +34,8 @@ public class AITest {
         // need to be done after FModel.initialize, or the Localizer isn't loaded yet
         List<RegisteredPlayer> players = Lists.newArrayList();
         Deck d1 = new Deck();
-        players.add(new RegisteredPlayer(d1).setPlayer(new LobbyPlayerAiAdvancedFsmFactory("p2", null)));
-        players.add(new RegisteredPlayer(d1).setPlayer(new LobbyPlayerAiAdvancedFsmFactory("p1", null)));
+        players.add(new RegisteredPlayer(d1).setPlayer(new LobbyPlayerAi("p2", null)));
+        players.add(new RegisteredPlayer(d1).setPlayer(new LobbyPlayerAi("p1", null)));
         GameRules rules = new GameRules(GameType.Constructed);
         Match match = new Match(rules, players, "Test");
         Game game = new Game(players, rules, match);

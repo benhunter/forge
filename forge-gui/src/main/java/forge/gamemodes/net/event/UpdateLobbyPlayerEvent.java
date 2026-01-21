@@ -10,7 +10,6 @@ import forge.gamemodes.net.server.RemoteClient;
 import java.util.Collections;
 import java.util.Set;
 
-// TODO: the should really be an enum that carries the change
 public final class UpdateLobbyPlayerEvent implements NetEvent {
     private static final long serialVersionUID = -7354695008599789571L;
 
@@ -68,7 +67,6 @@ public final class UpdateLobbyPlayerEvent implements NetEvent {
     public static UpdateLobbyPlayerEvent isReadyUpdate(final boolean isReady) {
         return new UpdateLobbyPlayerEvent(isReady);
     }
-    // Only used in mobile
     public static UpdateLobbyPlayerEvent teamUpdate(int team) {
         return new UpdateLobbyPlayerEvent(team);
     }
@@ -81,8 +79,6 @@ public final class UpdateLobbyPlayerEvent implements NetEvent {
         else
             this.sleeveIndex = index;
     }
-
-    // Only used in mobile
     private UpdateLobbyPlayerEvent(final int team) {
         this.team = team;
     }
@@ -117,7 +113,6 @@ public final class UpdateLobbyPlayerEvent implements NetEvent {
             final boolean isDevMode,
             final Set<AIOption> aiOptions,
             final String aiProfile) {
-        System.out.println("******** DEBUG UpdateLobbyPlayerEvent");
         this.type = type;
         this.name = name;
         this.avatarIndex = avatarIndex;

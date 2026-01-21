@@ -1,27 +1,21 @@
-package forge.ai.stateMachine;
+package forge.ai;
 
 import java.util.Set;
 
-import forge.ai.AIOption;
-import forge.ai.AiProfileUtil;
-import forge.ai.PlayerControllerAi;
-import forge.ai.common.LobbyPlayerAi;
+import forge.LobbyPlayer;
 import forge.game.Game;
 import forge.game.player.IGameEntitiesFactory;
 import forge.game.player.Player;
 import forge.game.player.PlayerController;
 
-/**
- * Advanced FSM-based AI player for use in lobbies. This is the standard AI implementation in Forge.
- */
-public class LobbyPlayerAiAdvancedFsmFactory extends LobbyPlayerAi implements IGameEntitiesFactory {
+public class LobbyPlayerAi extends LobbyPlayer implements IGameEntitiesFactory {
 
     private String aiProfile = "";
     private boolean rotateProfileEachGame;
     private boolean allowCheatShuffle;
     private boolean useSimulation;
 
-    public LobbyPlayerAiAdvancedFsmFactory(String name, Set<AIOption> options) {
+    public LobbyPlayerAi(String name, Set<AIOption> options) {
         super(name);
         if (options != null && options.contains(AIOption.USE_SIMULATION)) {
             this.useSimulation = true;
@@ -61,7 +55,7 @@ public class LobbyPlayerAiAdvancedFsmFactory extends LobbyPlayerAi implements IG
     @Override
     public Player createIngamePlayer(Game game, final int id) {
         Player ai = new Player(getName(), game, id);
-        ai.setFirstController(createControllerFor(ai)); // TODO: disgusting to pass ai to the inner function
+        ai.setFirstController(createControllerFor(ai));
 
         if (rotateProfileEachGame) {
             setAiProfile(AiProfileUtil.getRandomProfile());
@@ -69,4 +63,7 @@ public class LobbyPlayerAiAdvancedFsmFactory extends LobbyPlayerAi implements IG
         }
         return ai;
     }
+
+    @Override
+    public void hear(LobbyPlayer player, String message) { /* Local AI is deaf. */ }
 }

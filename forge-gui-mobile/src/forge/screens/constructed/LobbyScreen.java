@@ -858,11 +858,6 @@ public abstract class LobbyScreen extends LaunchScreen implements ILobbyView {
         //fireReady(index, playerPanels.get(index).isReady());
     }
 
-    void updateAiProfile(int index, String aiProfile) {
-        if (playerChangeListener != null) {
-            playerChangeListener.update(index, UpdateLobbyPlayerEvent.aiProfileUpdate(aiProfile));
-        }
-    }
     public void removePlayer(final int index) {
         lobby.removeSlot(index);
     }
@@ -881,7 +876,7 @@ public abstract class LobbyScreen extends LaunchScreen implements ILobbyView {
                 panel.isReady(),
                 panel.isDevMode(),
                 panel.getAiOptions(),
-                panel.getAiProfile());
+                null); // TODO implement AI profile support for mobile
     }
 
     public List<PlayerPanel> getPlayerPanels() {

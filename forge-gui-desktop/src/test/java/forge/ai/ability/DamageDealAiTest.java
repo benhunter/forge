@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import com.google.common.collect.Lists;
 
 import forge.ai.AITest;
-import forge.ai.stateMachine.LobbyPlayerAiAdvancedFsmFactory;
+import forge.ai.LobbyPlayerAi;
 import forge.ai.SpellApiToAi;
 import forge.deck.Deck;
 import forge.game.Game;
@@ -37,9 +37,9 @@ public class DamageDealAiTest extends AITest {
         }
         List<RegisteredPlayer> players = Lists.newArrayList();
         Deck d1 = new Deck();
-        players.add(new RegisteredPlayer(d1).setPlayer(new LobbyPlayerAiAdvancedFsmFactory("opponent", null)));
-        players.add(new RegisteredPlayer(d1).setPlayer(new LobbyPlayerAiAdvancedFsmFactory("ai", null)));
-        players.add(new RegisteredPlayer(d1).setPlayer(new LobbyPlayerAiAdvancedFsmFactory("ally", null)));
+        players.add(new RegisteredPlayer(d1).setPlayer(new LobbyPlayerAi("opponent", null)));
+        players.add(new RegisteredPlayer(d1).setPlayer(new LobbyPlayerAi("ai", null)));
+        players.add(new RegisteredPlayer(d1).setPlayer(new LobbyPlayerAi("ally", null)));
         GameRules rules = new GameRules(GameType.Constructed);
         Match match = new Match(rules, players, "Test");
         Game game = new Game(players, rules, match);

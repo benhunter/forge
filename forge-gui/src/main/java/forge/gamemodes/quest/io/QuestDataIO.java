@@ -697,7 +697,7 @@ public class QuestDataIO {
                 // TODO Stop setting standings once Bracket is loading from IO
                 draft.setStandings(standings);
                 if (standings != null) {
-                    draft.setBracket(QuestEventDraft.createBracketFromStandings(standings, aiNames, aiIcons)); // TODO: why create a tournment we don't need yet?
+                    draft.setBracket(QuestEventDraft.createBracketFromStandings(standings, aiNames, aiIcons));
                 }
                 draft.setAINames(aiNames);
                 draft.setAIIcons(aiIcons);

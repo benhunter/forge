@@ -355,7 +355,6 @@ public class VLobby implements ILobbyView {
         changePlayerFocus(index);
     }
     void firePlayerChangeListener(final int index) {
-        System.out.println("******** DEBUG firePlayerChangeListener");
         if (playerChangeListener != null) {
             playerChangeListener.update(index, getSlot(index));
         }
@@ -384,11 +383,10 @@ public class VLobby implements ILobbyView {
     }
 
     private UpdateLobbyPlayerEvent getSlot(final int index) {
-        System.out.println("******** DEBUG getSlot");
         final PlayerPanel panel = getPlayerPanel(index);
         return UpdateLobbyPlayerEvent.create(panel.getType(),
                 panel.getPlayerName(),
-                panel.getAvatarIndex(), -1/*TODO panel.getSleeveIndex()*/,
+                panel.getAvatarIndex(), -1 /*TODO panel.getSleeveIndex()*/,
                 panel.getTeam(), panel.isArchenemy(),
                 panel.isReady(),
                 panel.isDevMode(),

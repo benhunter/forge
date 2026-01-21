@@ -92,7 +92,6 @@ public abstract class GameLobby implements IHasGameType {
         return data.slots.get(index);
     }
     public void applyToSlot(final int index, final UpdateLobbyPlayerEvent event) {
-        System.out.println("******** DEBUG apply");
         final LobbySlot slot = getSlot(index);
         if (slot == null || event == null) {
             throw new NullPointerException();
@@ -422,8 +421,8 @@ public abstract class GameLobby implements IHasGameType {
             final boolean isAI = slot.getType() == LobbySlotType.AI;
             final LobbyPlayer lobbyPlayer;
             if (isAI) {
-                String aiProfileOverride = slot.getAiProfile(); // TODO "" means no override
-                lobbyPlayer = GamePlayerUtil.createAiPlayer(name, avatar, sleeve, aiOptions, aiProfileOverride); // TODO: pass AI profile here
+                String aiProfileOverride = slot.getAiProfile();
+                lobbyPlayer = GamePlayerUtil.createAiPlayer(name, avatar, sleeve, aiOptions, aiProfileOverride);
             }
             else {
                 boolean setNameNow = false;

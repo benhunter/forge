@@ -432,11 +432,6 @@ public class SettingsPage extends TabPage<SettingsScreen> {
                         Forge.disposeTextures = FModel.getPreferences().getPrefBoolean(FPref.UI_ENABLE_DISPOSE_TEXTURES);
                     }
                 }, 3);
-        lstSettings.addItem(new BooleanSetting(FPref.UI_ENABLE_AI_PICKER,
-                Forge.getLocalizer().getMessage("lblAiPicker"),
-                Forge.getLocalizer().getMessage("nlAiPicker")),
-                3);
-
         if (GuiBase.isAndroid()) { //this option does nothing except on Android
             lstSettings.addItem(new BooleanSetting(FPref.UI_AUTO_CACHE_SIZE,
                 Forge.getLocalizer().getMessage("lblAutoCacheSize"),

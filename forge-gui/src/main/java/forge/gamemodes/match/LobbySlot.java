@@ -40,7 +40,6 @@ public final class LobbySlot implements Serializable {
     }
 
     boolean apply(final UpdateLobbyPlayerEvent data) {
-        System.out.println("******** DEBUG apply aiProfile=" + data.getAiProfile());
         boolean changed = false;
         if (data.getType() != null) {
             setType(data.getType());
@@ -110,7 +109,7 @@ public final class LobbySlot implements Serializable {
         return type;
     }
     public void setType(final LobbySlotType type) {
-        this.type = type; // TODO: how does type get updated when use changes selection?
+        this.type = type;
     }
 
     public String getName() {
@@ -191,7 +190,6 @@ public final class LobbySlot implements Serializable {
     }
 
     public void setAiProfile(String aiProfile) {
-        System.out.println("********* DEBUG setAiProfile()= " + aiProfile);
         this.aiProfile = aiProfile;
     }
 }

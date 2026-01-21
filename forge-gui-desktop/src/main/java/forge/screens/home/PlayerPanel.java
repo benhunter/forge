@@ -80,7 +80,7 @@ public class PlayerPanel extends FPanel {
 
     // AI picker
     private String aiProfile;
-    private final FLabel aiPickerLabel = new FLabel.Builder().text("AI:").build(); // TODO: localize
+    private final FLabel aiPickerLabel = new FLabel.Builder().text(localizer.getMessage("lblAiPickerPanel") + ":").build();
     private FComboBoxWrapper<Object> aiPickerComboBox = new FComboBoxWrapper<>();
 
     private final FComboBoxWrapper<Object> teamComboBox = new FComboBoxWrapper<>();
@@ -236,9 +236,10 @@ public class PlayerPanel extends FPanel {
         txtPlayerName.setText(type == LobbySlotType.OPEN ? StringUtils.EMPTY : playerName);
         nameRandomiser.setEnabled(mayEdit);
 
-        aiPickerLabel.setVisible(prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER));
-        aiPickerComboBox.setVisible(prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER));
-        aiPickerComboBox.setEnabled(mayEdit);
+        boolean enableAiPicker = mayEdit && type == LobbySlotType.AI && prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER);
+        aiPickerLabel.setVisible(enableAiPicker);
+        aiPickerComboBox.setVisible(enableAiPicker);
+        aiPickerComboBox.setEnabled(enableAiPicker);
 
         teamComboBox.setEnabled(mayEdit);
         deckLabel.setVisible(mayEdit);
@@ -503,7 +504,6 @@ public class PlayerPanel extends FPanel {
         update();
     }
 
-    // TODO: dead code, no usages?
     public void setRemote(final boolean remote) {
         if (remote) {
             setType(LobbySlotType.REMOTE);
@@ -569,16 +569,15 @@ public class PlayerPanel extends FPanel {
         }
     };
 
-    // TODO needs usage?
     private final ActionListener aiPickerListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("******** DEBUG aiPickerListener");
             final FComboBox<Object> comboBox = (FComboBox<Object>) e.getSource();
             closeBtn.requestFocusInWindow();
             final Object selection = comboBox.getSelectedItem();
 
             if (selection != null) {
+                setAiProfile(selection.toString());
                 lobby.changePlayerFocus(index);
                 lobby.firePlayerChangeListener(index);
             }
@@ -894,9 +893,16 @@ public class PlayerPanel extends FPanel {
 
     public void setAiProfile(String aiProfile) {
         this.aiProfile = aiProfile;
+        if (aiProfile != null) {
+            aiPickerComboBox.setSelectedItem(aiProfile);
+        }
     }
 
     public String getAiProfile() {
+        final Object selection = aiPickerComboBox.getSelectedItem();
+        if (selection != null) {
+            return selection.toString();
+        }
         return aiProfile;
     }
 }

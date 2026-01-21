@@ -48,8 +48,13 @@ public abstract class LobbyPlayer {
         }
         LobbyPlayer other = (LobbyPlayer) obj;
         if (name == null) {
-            return other.name == null;
-        } else return name.equals(other.name);
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!name.equals(other.name)) {
+            return false;
+        }
+        return true;
     }
 
     public int getAvatarIndex() {

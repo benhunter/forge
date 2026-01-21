@@ -18,7 +18,6 @@
 package forge.ai;
 
 import forge.LobbyPlayer;
-import forge.ai.stateMachine.LobbyPlayerAiAdvancedFsmFactory;
 import forge.game.player.Player;
 import forge.util.Aggregates;
 import forge.util.FileUtil;
@@ -140,9 +139,9 @@ public class AiProfileUtil {
      */
     public static String getAIProp(final LobbyPlayer p, final AiProps fp0) {
         String val = null;
-        if (!(p instanceof LobbyPlayerAiAdvancedFsmFactory))
+        if (!(p instanceof LobbyPlayerAi))
             return "";
-        String profile = ((LobbyPlayerAiAdvancedFsmFactory) p).getAiProfile();
+        String profile = ((LobbyPlayerAi) p).getAiProfile();
        
         if (loadedProfiles.get(profile) != null) {
             val = loadedProfiles.get(profile).get(fp0);
