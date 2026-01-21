@@ -92,7 +92,7 @@ public abstract class GameLobby implements IHasGameType {
         return data.slots.get(index);
     }
     public void applyToSlot(final int index, final UpdateLobbyPlayerEvent event) {
-        System.out.println("******** DEBUG apply");
+        System.out.println("******** DEBUG GameLobby.applyToSlot()");
         final LobbySlot slot = getSlot(index);
         if (slot == null || event == null) {
             throw new NullPointerException();

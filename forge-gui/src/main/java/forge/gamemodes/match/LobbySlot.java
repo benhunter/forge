@@ -40,7 +40,7 @@ public final class LobbySlot implements Serializable {
     }
 
     boolean apply(final UpdateLobbyPlayerEvent data) {
-        System.out.println("******** DEBUG apply aiProfile=" + data.getAiProfile());
+        System.out.println("******** DEBUG LobbySlot.apply() aiProfile=" + data.getAiProfile());
         boolean changed = false;
         if (data.getType() != null) {
             setType(data.getType());

@@ -10,7 +10,7 @@ import forge.gamemodes.net.server.RemoteClient;
 import java.util.Collections;
 import java.util.Set;
 
-// TODO: the should really be an enum that carries the change
+// TODO: the should really be an enum that carries the change or a builder pattern
 public final class UpdateLobbyPlayerEvent implements NetEvent {
     private static final long serialVersionUID = -7354695008599789571L;
 
@@ -56,6 +56,7 @@ public final class UpdateLobbyPlayerEvent implements NetEvent {
     private UpdateLobbyPlayerEvent() { }
 
     private UpdateLobbyPlayerEvent(String name) {
+        System.out.println("******** DEBUG UpdateLobbyPlayerEvent() constructor: name...");
         this.name = name;
     }
 
@@ -87,6 +88,7 @@ public final class UpdateLobbyPlayerEvent implements NetEvent {
         this.team = team;
     }
     private UpdateLobbyPlayerEvent(final String DeckName, final String Scheme, final String Plane, final String Vanguard) {
+        System.out.println("******** DEBUG UpdateLobbyPlayerEvent() constructor: SchemeDeckName...");
         this.SchemeDeckName = Scheme;
         this.PlanarDeckName = Plane;
         this.AvatarVanguard = Vanguard;
@@ -94,14 +96,17 @@ public final class UpdateLobbyPlayerEvent implements NetEvent {
     }
 
     private UpdateLobbyPlayerEvent(final Deck deck) {
+        System.out.println("******** DEBUG UpdateLobbyPlayerEvent() constructor: deck");
         this.deck = deck;
     }
 
     private UpdateLobbyPlayerEvent(final boolean isReady) {
+        System.out.println("******** DEBUG UpdateLobbyPlayerEvent() constructor: isReady");
         this.isReady = isReady;
     }
 
     private UpdateLobbyPlayerEvent(final DeckSection section, final CardPool cards) {
+        System.out.println("******** DEBUG UpdateLobbyPlayerEvent() constructor: section, cards");
         this.section = section;
         this.cards = cards;
     }
@@ -117,7 +122,7 @@ public final class UpdateLobbyPlayerEvent implements NetEvent {
             final boolean isDevMode,
             final Set<AIOption> aiOptions,
             final String aiProfile) {
-        System.out.println("******** DEBUG UpdateLobbyPlayerEvent");
+        System.out.println("******** DEBUG UpdateLobbyPlayerEvent() full constructor");
         this.type = type;
         this.name = name;
         this.avatarIndex = avatarIndex;
