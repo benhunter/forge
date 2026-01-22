@@ -422,8 +422,8 @@ public abstract class GameLobby implements IHasGameType {
             final boolean isAI = slot.getType() == LobbySlotType.AI;
             final LobbyPlayer lobbyPlayer;
             if (isAI) {
-                String aiProfileOverride = slot.getAiProfile(); // TODO "" means no override
-                lobbyPlayer = GamePlayerUtil.createAiPlayer(name, avatar, sleeve, aiOptions, aiProfileOverride); // TODO: pass AI profile here
+                String aiProfileOverride = slot.getAiProfile();
+                lobbyPlayer = GamePlayerUtil.createAiPlayer(name, avatar, sleeve, aiOptions, aiProfileOverride);
             }
             else {
                 boolean setNameNow = false;
