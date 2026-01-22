@@ -56,6 +56,6 @@ public class LobbyPlayerAiSimpleFactory extends LobbyPlayerAi implements IGameEn
 //    }
 
     public void setAiProfile(String profile) {
-
+        System.out.println("******** DEBUG LobbyPlayerAiSimpleFactory.setAiProfile() profile= " + profile);
     }
 }
