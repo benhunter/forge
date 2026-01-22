@@ -236,9 +236,10 @@ public class PlayerPanel extends FPanel {
         txtPlayerName.setText(type == LobbySlotType.OPEN ? StringUtils.EMPTY : playerName);
         nameRandomiser.setEnabled(mayEdit);
 
-        aiPickerLabel.setVisible(prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER));
-        aiPickerComboBox.setVisible(prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER));
-        aiPickerComboBox.setEnabled(mayEdit);
+        boolean enableAiPicker = mayEdit && type == LobbySlotType.AI && prefs.getPrefBoolean(FPref.UI_ENABLE_AI_PICKER);
+        aiPickerLabel.setVisible(enableAiPicker);
+        aiPickerComboBox.setVisible(enableAiPicker);
+        aiPickerComboBox.setEnabled(enableAiPicker);
 
         teamComboBox.setEnabled(mayEdit);
         deckLabel.setVisible(mayEdit);
