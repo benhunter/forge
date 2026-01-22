@@ -2,8 +2,6 @@ package forge.player;
 
 import forge.LobbyPlayer;
 import forge.ai.AiProfileUtil;
-import forge.gui.GuiBase;
-import forge.gui.interfaces.IGuiBase;
 import forge.localinstance.properties.ForgePreferences;
 import forge.model.FModel;
 import org.mockito.MockedStatic;
