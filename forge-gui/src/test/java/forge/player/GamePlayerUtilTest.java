@@ -14,12 +14,15 @@ import static org.testng.Assert.assertNotNull;
 
 public class GamePlayerUtilTest {
 
+    /**
+     * Dev note: This test fails under Java 25.
+     */
     @Test
     public void testCreateAiPlayer_createsLobbyPlayer_whenProfileOverrideIsNull() {
-        // mock ForgePreferences returned by FModel
+        // Mock ForgePreferences returned by FModel
         ForgePreferences mockPrefs = mock(ForgePreferences.class);
         when(mockPrefs.getPref(ForgePreferences.FPref.UI_CURRENT_AI_PROFILE)).thenReturn("Default");
-        // allow setPref/save to be called without throwing
+        // Allow setPref/save to be called without throwing
         doNothing().when(mockPrefs).setPref(any(), any());
         doNothing().when(mockPrefs).save();
 
