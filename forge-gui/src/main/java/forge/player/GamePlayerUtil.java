@@ -17,8 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Set;
 
 public final class GamePlayerUtil {
-    private GamePlayerUtil() { }
-    private static Localizer localizer = Localizer.getInstance();
+    private static final Localizer localizer = Localizer.getInstance();
     private static final LobbyPlayer guiPlayer = new LobbyPlayerHuman("Human");
     public static LobbyPlayer getGuiPlayer() {
         return guiPlayer;
@@ -63,14 +62,11 @@ public final class GamePlayerUtil {
     public static LobbyPlayer createAiPlayer(final String name, final int avatarIndex, final int sleeveIndex) {
         return createAiPlayer(name, avatarIndex, sleeveIndex, null, "");
     }
-    public static LobbyPlayer createAiPlayer(final String name, final int avatarIndex, final int sleeveIndex, final Set<AIOption> options) {
-        return createAiPlayer(name, avatarIndex, sleeveIndex, options, "");
-    }
     public static LobbyPlayer createAiPlayer(final String name, final int avatarIndex, final int sleeveIndex, final Set<AIOption> options, final String profileOverride) {
         final LobbyPlayerAi player = new LobbyPlayerAi(name, options);
 
         // TODO: implement specific AI profiles for quest mode.
-        String profile = "";
+        String profile;
         if (profileOverride.isEmpty()) {
             String lastProfileChosen = FModel.getPreferences().getPref(FPref.UI_CURRENT_AI_PROFILE);
             if (!AiProfileUtil.getProfilesDisplayList().contains(lastProfileChosen)) {
@@ -158,7 +154,7 @@ public final class GamePlayerUtil {
                 null,
                 true
         );
-        Integer port;
+        int port;
         try {
              port = Integer.parseInt(input);
         } catch (NumberFormatException nfe) {
@@ -173,7 +169,7 @@ public final class GamePlayerUtil {
     }
 
     private static String getVerifiedPlayerName(String newName, final String oldName) {
-        if (newName == null || !StringUtils.isAlphanumericSpace(newName)) {
+        if (!StringUtils.isAlphanumericSpace(newName)) {
             newName = (StringUtils.isBlank(oldName) ? "Human" : oldName);
         } else if (StringUtils.isWhitespace(newName)) {
             newName = "Human";
