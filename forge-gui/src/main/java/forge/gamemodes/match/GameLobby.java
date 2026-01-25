@@ -421,7 +421,7 @@ public abstract class GameLobby implements IHasGameType {
             final boolean isAI = slot.getType() == LobbySlotType.AI;
             final LobbyPlayer lobbyPlayer;
             if (isAI) {
-                lobbyPlayer = GamePlayerUtil.createAiPlayer(name, avatar, sleeve, aiOptions);
+                lobbyPlayer = GamePlayerUtil.createAiPlayer(name, avatar, sleeve, aiOptions, "");
             }
             else {
                 boolean setNameNow = false;
