@@ -114,6 +114,7 @@ public class AiProfileUtil {
         return profileMap;
     }
 
+    // TODO refactor to be a method of Player
     public static String getProperty(final Player p, final AiProps propName) {
         String prop = AiProfileUtil.getAIProp(p.getLobbyPlayer(), propName);
 
@@ -124,9 +125,11 @@ public class AiProfileUtil {
 
         return prop;
     }
+    // TODO refactor to be a method of Player
     public static int getIntProperty(final Player p, final AiProps propName) {
         return Integer.parseInt(getProperty(p, propName));
     }
+    // TODO refactor to be a method of Player
     public static boolean getBoolProperty(final Player p, final AiProps propName) {
         return Boolean.parseBoolean(getProperty(p, propName));
     }
@@ -137,6 +140,7 @@ public class AiProfileUtil {
      * @param fp0 an AI property.
      * @return String
      */
+    // TODO refactor to be a method of LobbyPlayerAiAdvancedFsmFactory
     public static String getAIProp(final LobbyPlayer p, final AiProps fp0) {
         String val = null;
         if (!(p instanceof LobbyPlayerAi))
