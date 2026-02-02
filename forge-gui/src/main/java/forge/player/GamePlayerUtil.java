@@ -3,6 +3,8 @@ package forge.player;
 import forge.LobbyPlayer;
 import forge.ai.AIOption;
 import forge.ai.AiProfileUtil;
+import forge.ai.common.LobbyPlayerAi;
+import forge.ai.mcts.LobbyPlayerAiMctsFactory;
 import forge.ai.simple.LobbyPlayerAiSimpleFactory;
 import forge.gui.GuiBase;
 import forge.gui.util.SOptionPane;
@@ -67,8 +69,12 @@ public final class GamePlayerUtil {
         return createAiPlayer(name, avatarIndex, sleeveIndex, options, "");
     }
     public static LobbyPlayer createAiPlayer(final String name, final int avatarIndex, final int sleeveIndex, final Set<AIOption> options, final String profileOverride) {
-        // TODO: create the appropriate LobbyPlayerAi subclass based on AI selection in the lobby
-        final LobbyPlayerAiSimpleFactory player = new LobbyPlayerAiSimpleFactory(name, options);
+        final LobbyPlayerAi player;
+        if (options != null && options.contains(AIOption.USE_MCTS)) {
+            player = new LobbyPlayerAiMctsFactory(name, options);
+        } else {
+            player = new LobbyPlayerAiSimpleFactory(name, options);
+        }
 
         // TODO: implement specific AI profiles for quest mode.
         String profile = "";

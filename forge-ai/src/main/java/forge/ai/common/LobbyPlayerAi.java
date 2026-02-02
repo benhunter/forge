@@ -12,4 +12,12 @@ public class LobbyPlayerAi extends LobbyPlayer {
 
     @Override
     public void hear(LobbyPlayer player, String message) { /* Local AI is deaf. */ }
+
+    public void setRotateProfileEachGame(boolean rotateProfileEachGame) {
+        // No-op by default.
+    }
+
+    public void setAiProfile(String profile) {
+        // No-op by default.
+    }
 }

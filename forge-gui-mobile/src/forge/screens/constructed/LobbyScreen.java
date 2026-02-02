@@ -650,6 +650,7 @@ public abstract class LobbyScreen extends LaunchScreen implements ILobbyView {
                 panel.setIsDevMode(slot.isDevMode());
                 panel.setIsArchenemy(slot.isArchenemy());
                 panel.setUseAiSimulation(slot.getAiOptions().contains(AIOption.USE_SIMULATION));
+                panel.setUseAiMcts(slot.getAiOptions().contains(AIOption.USE_MCTS));
                 panel.setMayEdit(lobby.mayEdit(i));
                 panel.setMayControl(lobby.mayControl(i));
                 panel.setMayRemove(lobby.mayRemove(i));

@@ -75,6 +75,7 @@ public class PlayerPanel extends FPanel {
     private FRadioButton radioHuman;
     private FRadioButton radioAi;
     private JCheckBoxMenuItem radioAiUseSimulation;
+    private JCheckBoxMenuItem radioAiUseMcts;
     private FRadioButton radioOpen;
     private FCheckBox chkReady;
 
@@ -471,15 +472,35 @@ public class PlayerPanel extends FPanel {
     }
 
     public Set<AIOption> getAiOptions() {
-        return isSimulatedAi()
-                ? ImmutableSet.of(AIOption.USE_SIMULATION)
-                : Collections.emptySet();
+        if (!isSimulatedAi() && !isMctsAi()) {
+            return Collections.emptySet();
+        }
+        ImmutableSet.Builder<AIOption> options = ImmutableSet.builder();
+        if (isSimulatedAi()) {
+            options.add(AIOption.USE_SIMULATION);
+        }
+        if (isMctsAi()) {
+            options.add(AIOption.USE_MCTS);
+        }
+        return options.build();
     }
     private boolean isSimulatedAi() {
         return radioAi.isSelected() && radioAiUseSimulation.isSelected();
     }
+    private boolean isMctsAi() {
+        return radioAi.isSelected() && radioAiUseMcts.isSelected();
+    }
     public void setUseAiSimulation(final boolean useSimulation) {
         radioAiUseSimulation.setSelected(useSimulation);
+        if (useSimulation) {
+            radioAiUseMcts.setSelected(false);
+        }
+    }
+    public void setUseAiMcts(final boolean useMcts) {
+        radioAiUseMcts.setSelected(useMcts);
+        if (useMcts) {
+            radioAiUseSimulation.setSelected(false);
+        }
     }
 
     public boolean isArchenemy() {
@@ -644,7 +665,20 @@ public class PlayerPanel extends FPanel {
         final JPopupMenu menu = new  JPopupMenu();
         radioAiUseSimulation = new JCheckBoxMenuItem(localizer.getMessage("lblUseSimulation"));
         menu.add(radioAiUseSimulation);
-        radioAiUseSimulation.addActionListener(e -> lobby.firePlayerChangeListener(index));
+        radioAiUseSimulation.addActionListener(e -> {
+            if (radioAiUseSimulation.isSelected()) {
+                radioAiUseMcts.setSelected(false);
+            }
+            lobby.firePlayerChangeListener(index);
+        });
+        radioAiUseMcts = new JCheckBoxMenuItem(localizer.getMessage("lblUseMcts"));
+        menu.add(radioAiUseMcts);
+        radioAiUseMcts.addActionListener(e -> {
+            if (radioAiUseMcts.isSelected()) {
+                radioAiUseSimulation.setSelected(false);
+            }
+            lobby.firePlayerChangeListener(index);
+        });
         radioAi.setComponentPopupMenu(menu);
 
         radioHuman.addMouseListener(radioMouseAdapter(radioHuman, LobbySlotType.LOCAL));
