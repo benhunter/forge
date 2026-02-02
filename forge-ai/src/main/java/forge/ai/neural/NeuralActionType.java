@@ -1,0 +1,18 @@
+package forge.ai.neural;
+
+public enum NeuralActionType {
+    PLAY_SPELL_ABILITY,
+    CHOOSE_TARGET,
+    CHOOSE_CARD,
+    CHOOSE_PLAYER,
+    CHOOSE_NUMBER,
+    CHOOSE_MODE,
+    DECLARE_ATTACKERS,
+    DECLARE_BLOCKERS,
+    ORDER_BLOCKERS,
+    ORDER_ATTACKERS,
+    KEEP_HAND,
+    TAKE_MULLIGAN,
+    PASS_PRIORITY,
+    NO_OP
+}
