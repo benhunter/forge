@@ -5,7 +5,6 @@ import forge.ai.neural.training.NeuralTrainingDataCollector;
 import forge.game.Game;
 import forge.game.card.CardCollectionView;
 import forge.game.player.Player;
-import forge.game.player.PlayerController.BinaryChoiceType;
 import forge.game.spellability.AbilitySub;
 import forge.game.spellability.SpellAbility;
 
@@ -17,6 +16,7 @@ import java.util.Map;
  * Neural-network based AI built on top of the simple AI controller.
  */
 public class PlayerControllerAiNeural extends forge.ai.simple.PlayerControllerAiSimple {
+    private final Game game;
     private final NeuralDecisionEngine decisionEngine;
     private final NeuralTrainingDataCollector dataCollector;
 
@@ -30,6 +30,7 @@ public class PlayerControllerAiNeural extends forge.ai.simple.PlayerControllerAi
                                     PolicyValueNetwork network,
                                     NeuralTrainingDataCollector dataCollector) {
         super(game, player, lobbyPlayer);
+        this.game = game;
         this.decisionEngine = new NeuralDecisionEngine(new NeuralStateEncoder(), network);
         this.dataCollector = dataCollector;
     }

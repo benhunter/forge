@@ -48,34 +48,12 @@ public final class NeuralStateEncoder {
         Objects.requireNonNull(player, "player");
 
         float[] features = new float[FEATURE_VECTOR_SIZE];
-        CardCollectionView selfBattlefield = player.getCardsIn(ZoneType.Battlefield);
-        features[FEATURE_SELF_LIFE] = player.getLife();
-        features[FEATURE_SELF_POISON] = player.getPoisonCounters();
-        features[FEATURE_SELF_HAND] = player.getCardsIn(ZoneType.Hand).size();
-        features[FEATURE_SELF_LIBRARY] = player.getCardsIn(ZoneType.Library).size();
-        features[FEATURE_SELF_GRAVEYARD] = player.getCardsIn(ZoneType.Graveyard).size();
-        features[FEATURE_SELF_BATTLEFIELD] = selfBattlefield.size();
-        features[FEATURE_SELF_CREATURES] = countType(selfBattlefield, CardTypePredicate.CREATURE);
-        features[FEATURE_SELF_LANDS] = countType(selfBattlefield, CardTypePredicate.LAND);
-        features[FEATURE_SELF_ARTIFACTS] = countType(selfBattlefield, CardTypePredicate.ARTIFACT);
-        features[FEATURE_SELF_ENCHANTMENTS] = countType(selfBattlefield, CardTypePredicate.ENCHANTMENT);
-        features[FEATURE_SELF_PLANESWALKERS] = countType(selfBattlefield, CardTypePredicate.PLANESWALKER);
-        features[FEATURE_SELF_MANA_POOL] = player.getManaPool().size();
+        features(features, player, FEATURE_SELF_LIFE, FEATURE_SELF_POISON, FEATURE_SELF_HAND, FEATURE_SELF_LIBRARY, FEATURE_SELF_GRAVEYARD, FEATURE_SELF_BATTLEFIELD, FEATURE_SELF_CREATURES, FEATURE_SELF_LANDS, FEATURE_SELF_ARTIFACTS, FEATURE_SELF_ENCHANTMENTS, FEATURE_SELF_PLANESWALKERS);
+        features[FEATURE_SELF_MANA_POOL] = player.getManaPool().totalMana();
 
         Player opponent = findOpponent(game, player);
         if (opponent != null) {
-            CardCollectionView oppBattlefield = opponent.getCardsIn(ZoneType.Battlefield);
-            features[FEATURE_OPP_LIFE] = opponent.getLife();
-            features[FEATURE_OPP_POISON] = opponent.getPoisonCounters();
-            features[FEATURE_OPP_HAND] = opponent.getCardsIn(ZoneType.Hand).size();
-            features[FEATURE_OPP_LIBRARY] = opponent.getCardsIn(ZoneType.Library).size();
-            features[FEATURE_OPP_GRAVEYARD] = opponent.getCardsIn(ZoneType.Graveyard).size();
-            features[FEATURE_OPP_BATTLEFIELD] = oppBattlefield.size();
-            features[FEATURE_OPP_CREATURES] = countType(oppBattlefield, CardTypePredicate.CREATURE);
-            features[FEATURE_OPP_LANDS] = countType(oppBattlefield, CardTypePredicate.LAND);
-            features[FEATURE_OPP_ARTIFACTS] = countType(oppBattlefield, CardTypePredicate.ARTIFACT);
-            features[FEATURE_OPP_ENCHANTMENTS] = countType(oppBattlefield, CardTypePredicate.ENCHANTMENT);
-            features[FEATURE_OPP_PLANESWALKERS] = countType(oppBattlefield, CardTypePredicate.PLANESWALKER);
+            features(features, opponent, FEATURE_OPP_LIFE, FEATURE_OPP_POISON, FEATURE_OPP_HAND, FEATURE_OPP_LIBRARY, FEATURE_OPP_GRAVEYARD, FEATURE_OPP_BATTLEFIELD, FEATURE_OPP_CREATURES, FEATURE_OPP_LANDS, FEATURE_OPP_ARTIFACTS, FEATURE_OPP_ENCHANTMENTS, FEATURE_OPP_PLANESWALKERS);
         }
 
         PhaseHandler phaseHandler = game.getPhaseHandler();
@@ -87,6 +65,21 @@ public final class NeuralStateEncoder {
         }
 
         return new NeuralState(features);
+    }
+
+    private void features(float[] features, Player player, int featurePlayerLife, int featurePlayerPoisonCounters, int featureCardsInHandSize, int featureCardsInLibrarySize, int featureCardsInGraveyardSize, int featureCardsInBattlefieldSize, int featurePlayerCreatures, int featurePlayerLands, int featurePlayerArtifacts, int featurePlayerEnchantments, int featurePlayerPlaneswalkers) {
+        CardCollectionView playerBattlefield = player.getCardsIn(ZoneType.Battlefield);
+        features[featurePlayerLife] = player.getLife();
+        features[featurePlayerPoisonCounters] = player.getPoisonCounters();
+        features[featureCardsInHandSize] = player.getCardsIn(ZoneType.Hand).size();
+        features[featureCardsInLibrarySize] = player.getCardsIn(ZoneType.Library).size();
+        features[featureCardsInGraveyardSize] = player.getCardsIn(ZoneType.Graveyard).size();
+        features[featureCardsInBattlefieldSize] = playerBattlefield.size();
+        features[featurePlayerCreatures] = countType(playerBattlefield, CardTypePredicate.CREATURE);
+        features[featurePlayerLands] = countType(playerBattlefield, CardTypePredicate.LAND);
+        features[featurePlayerArtifacts] = countType(playerBattlefield, CardTypePredicate.ARTIFACT);
+        features[featurePlayerEnchantments] = countType(playerBattlefield, CardTypePredicate.ENCHANTMENT);
+        features[featurePlayerPlaneswalkers] = countType(playerBattlefield, CardTypePredicate.PLANESWALKER);
     }
 
     private Player findOpponent(Game game, Player player) {
