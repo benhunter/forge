@@ -1,6 +1,7 @@
 package forge.ai.neural;
 
 import forge.ai.neural.schema.NeuralFeatureSchema;
+import forge.card.MagicColor;
 import forge.card.mana.ManaAtom;
 import forge.game.Game;
 import forge.game.card.Card;
@@ -86,6 +87,7 @@ public final class NeuralStateEncoder {
 
         float[] features = new float[schema.getTotalSize()];
         features(features, player, FEATURE_SELF_LIFE, FEATURE_SELF_POISON, FEATURE_SELF_HAND, FEATURE_SELF_LIBRARY, FEATURE_SELF_GRAVEYARD, FEATURE_SELF_BATTLEFIELD, FEATURE_SELF_CREATURES, FEATURE_SELF_LANDS, FEATURE_SELF_ARTIFACTS, FEATURE_SELF_ENCHANTMENTS, FEATURE_SELF_PLANESWALKERS);
+        CardCollectionView selfBattlefield = player.getCardsIn(ZoneType.Battlefield);
         features[FEATURE_SELF_MANA_POOL] = player.getManaPool().totalMana();
         features[FEATURE_SELF_ENERGY] = player.getCounters(CounterEnumType.ENERGY);
         features[FEATURE_SELF_EXPERIENCE] = player.getCounters(CounterEnumType.EXPERIENCE);
@@ -98,6 +100,7 @@ public final class NeuralStateEncoder {
         Player opponent = findOpponent(game, player);
         if (opponent != null) {
             features(features, opponent, FEATURE_OPP_LIFE, FEATURE_OPP_POISON, FEATURE_OPP_HAND, FEATURE_OPP_LIBRARY, FEATURE_OPP_GRAVEYARD, FEATURE_OPP_BATTLEFIELD, FEATURE_OPP_CREATURES, FEATURE_OPP_LANDS, FEATURE_OPP_ARTIFACTS, FEATURE_OPP_ENCHANTMENTS, FEATURE_OPP_PLANESWALKERS);
+            CardCollectionView oppBattlefield = opponent.getCardsIn(ZoneType.Battlefield);
             features[FEATURE_OPP_ENERGY] = opponent.getCounters(CounterEnumType.ENERGY);
             features[FEATURE_OPP_EXPERIENCE] = opponent.getCounters(CounterEnumType.EXPERIENCE);
             features[FEATURE_OPP_EXILE] = opponent.getCardsIn(ZoneType.Exile).size();
@@ -193,12 +196,12 @@ public final class NeuralStateEncoder {
         if (manaPool == null) {
             return;
         }
-        features[offset] = manaPool.getAmountOfColor(ManaAtom.WHITE);
-        features[offset + 1] = manaPool.getAmountOfColor(ManaAtom.BLUE);
-        features[offset + 2] = manaPool.getAmountOfColor(ManaAtom.BLACK);
-        features[offset + 3] = manaPool.getAmountOfColor(ManaAtom.RED);
-        features[offset + 4] = manaPool.getAmountOfColor(ManaAtom.GREEN);
-        features[offset + 5] = manaPool.getAmountOfColor(ManaAtom.COLORLESS);
+        features[offset] = manaPool.getAmountOfColor(MagicColor.WHITE);
+        features[offset + 1] = manaPool.getAmountOfColor(MagicColor.BLUE);
+        features[offset + 2] = manaPool.getAmountOfColor(MagicColor.BLACK);
+        features[offset + 3] = manaPool.getAmountOfColor(MagicColor.RED);
+        features[offset + 4] = manaPool.getAmountOfColor(MagicColor.GREEN);
+        features[offset + 5] = manaPool.getAmountOfColor(MagicColor.COLORLESS);
     }
 
     private int countCombatBlockers(Combat combat) {
