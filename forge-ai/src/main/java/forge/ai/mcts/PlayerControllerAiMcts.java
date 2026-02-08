@@ -40,10 +40,15 @@ import java.util.function.Predicate;
 
 public class PlayerControllerAiMcts extends PlayerController {
     private final MctsSearch search;
+    private int iterationBudget = 100;
+    private long timeLimitMs = 50;
+    private double explorationConstant = 1.4;
+    private int rolloutDepth = 2;
 
     public PlayerControllerAiMcts(Game game, Player player, LobbyPlayer lobbyPlayer) {
         super(game, player, lobbyPlayer);
         this.search = new MctsSearch(game, player);
+        applySearchSettings();
     }
 
     @Override
@@ -594,5 +599,32 @@ public class PlayerControllerAiMcts extends PlayerController {
     @Override
     public void cancelAwaitNextInput() {
 
+    }
+
+    public void setIterationBudget(int iterationBudget) {
+        this.iterationBudget = iterationBudget;
+        applySearchSettings();
+    }
+
+    public void setTimeLimitMs(long timeLimitMs) {
+        this.timeLimitMs = timeLimitMs;
+        applySearchSettings();
+    }
+
+    public void setExplorationConstant(double explorationConstant) {
+        this.explorationConstant = explorationConstant;
+        applySearchSettings();
+    }
+
+    public void setRolloutDepth(int rolloutDepth) {
+        this.rolloutDepth = rolloutDepth;
+        applySearchSettings();
+    }
+
+    private void applySearchSettings() {
+        search.setIterationBudget(iterationBudget);
+        search.setTimeLimitMs(timeLimitMs);
+        search.setExplorationConstant(explorationConstant);
+        search.setRolloutDepth(rolloutDepth);
     }
 }

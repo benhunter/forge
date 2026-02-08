@@ -5,6 +5,7 @@ import forge.ai.simulation.GameSimulator;
 import forge.ai.simulation.GameStateEvaluator;
 import forge.ai.simulation.MultiTargetSelector;
 import forge.ai.simulation.SimulationController;
+import forge.ai.simulation.SpellAbilityPicker;
 import forge.game.Game;
 import forge.game.GameEntity;
 import forge.game.GameObject;
@@ -22,35 +23,58 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class MctsSearch {
     private static final int MAX_TARGET_SAMPLES = 8;
     private final Game game;
     private final Player player;
     private final GameStateEvaluator evaluator;
+    private final Random random;
+    private final MctsRolloutPolicy rolloutPolicy;
+    private int iterationBudget = 100;
+    private long timeLimitMs = 50;
+    private double explorationConstant = 1.4;
+    private int rolloutDepth = 2;
 
     public MctsSearch(Game game, Player player) {
         this.game = game;
         this.player = player;
         this.evaluator = new GameStateEvaluator();
+        this.random = new Random();
+        this.rolloutPolicy = new MctsRolloutPolicy();
     }
 
     public SpellAbility chooseAbilityToPlay(Card hostCard, List<SpellAbility> abilities, ITriggerEvent triggerEvent) {
         if (abilities == null || abilities.isEmpty()) {
             return null;
         }
-        SpellAbility bestAbility = null;
-        GameStateEvaluator.Score bestScore = null;
-        for (SpellAbility ability : abilities) {
-            GameStateEvaluator.Score score = simulateAbility(ability);
-            if (score == null) {
-                continue;
+        MctsNode root = new MctsNode(game, player, new ArrayList<>(abilities), null, null, null);
+        long endTime = timeLimitMs > 0 ? System.currentTimeMillis() + timeLimitMs : Long.MAX_VALUE;
+        int iterations = 0;
+        while (iterations < iterationBudget && System.currentTimeMillis() < endTime) {
+            iterations++;
+            MctsNode node = root;
+            while (node.isFullyExpanded() && node.hasChildren()) {
+                MctsNode next = node.selectChildUct(explorationConstant);
+                if (next == null) {
+                    break;
+                }
+                node = next;
             }
-            if (bestScore == null || score.value > bestScore.value) {
-                bestScore = score;
-                bestAbility = ability;
+            if (node.hasUntriedActions()) {
+                SpellAbility action = node.popUntriedAction(random);
+                if (action != null) {
+                    SimulationResult result = simulateAction(node, action);
+                    if (result != null) {
+                        node = node.addChild(action, result.game, result.player, result.candidateActions, null);
+                    }
+                }
             }
+            double score = rolloutPolicy.rollout(node.getGame(), node.getPlayer(), rolloutDepth);
+            backpropagate(node, score);
         }
+        SpellAbility bestAbility = selectBestAction(root);
         return bestAbility != null ? bestAbility : abilities.get(0);
     }
 
@@ -163,6 +187,22 @@ public class MctsSearch {
         return attackers;
     }
 
+    public void setIterationBudget(int iterationBudget) {
+        this.iterationBudget = iterationBudget;
+    }
+
+    public void setTimeLimitMs(long timeLimitMs) {
+        this.timeLimitMs = timeLimitMs;
+    }
+
+    public void setExplorationConstant(double explorationConstant) {
+        this.explorationConstant = explorationConstant;
+    }
+
+    public void setRolloutDepth(int rolloutDepth) {
+        this.rolloutDepth = rolloutDepth;
+    }
+
     private GameStateEvaluator.Score simulateAbility(SpellAbility ability) {
         if (ability == null) {
             return null;
@@ -228,5 +268,61 @@ public class MctsSearch {
             return evaluator.evalCard(game, player, card);
         }
         return 0;
+    }
+
+    private SimulationResult simulateAction(MctsNode node, SpellAbility action) {
+        GameStateEvaluator.Score baseScore = evaluator.getScoreForGameState(node.getGame(), node.getPlayer());
+        SimulationController controller = new SimulationController(baseScore);
+        GameSimulator simulator = new GameSimulator(controller, node.getGame(), node.getPlayer(), null);
+        GameStateEvaluator.Score score = simulator.simulateSpellAbility(action);
+        if (score == null) {
+            return null;
+        }
+        Game simGame = simulator.getSimulatedGameState();
+        Player simPlayer = (Player) simulator.getGameCopier().find(node.getPlayer());
+        if (simPlayer == null) {
+            return null;
+        }
+        List<SpellAbility> candidateActions = new SpellAbilityPicker(simGame, simPlayer).getCandidateSpellsAndAbilities();
+        return new SimulationResult(simGame, simPlayer, candidateActions, score.value);
+    }
+
+    private void backpropagate(MctsNode node, double score) {
+        MctsNode current = node;
+        while (current != null) {
+            current.recordScore(score);
+            current = current.getParent();
+        }
+    }
+
+    private SpellAbility selectBestAction(MctsNode root) {
+        SpellAbility bestAbility = null;
+        int bestVisits = -1;
+        double bestScore = Double.NEGATIVE_INFINITY;
+        for (MctsNode child : root.getChildren()) {
+            if (child.getVisitCount() > bestVisits) {
+                bestVisits = child.getVisitCount();
+                bestScore = child.getMeanScore();
+                bestAbility = child.getIncomingAction();
+            } else if (child.getVisitCount() == bestVisits && child.getMeanScore() > bestScore) {
+                bestScore = child.getMeanScore();
+                bestAbility = child.getIncomingAction();
+            }
+        }
+        return bestAbility;
+    }
+
+    private static class SimulationResult {
+        private final Game game;
+        private final Player player;
+        private final List<SpellAbility> candidateActions;
+        private final double score;
+
+        private SimulationResult(Game game, Player player, List<SpellAbility> candidateActions, double score) {
+            this.game = game;
+            this.player = player;
+            this.candidateActions = candidateActions;
+            this.score = score;
+        }
     }
 }
