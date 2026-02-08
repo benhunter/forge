@@ -101,7 +101,6 @@ public class MctsSearch {
         Player simAiPlayer = simulator.getSimAiPlayer();
         List<SpellAbility> actions = getCandidateActions(simGame, simAiPlayer);
         MctsNode child = new MctsNode(node, action, simGame, simAiPlayer, actions);
-        child.updateStats(score.value);
         node.addChild(child);
         return child;
     }
