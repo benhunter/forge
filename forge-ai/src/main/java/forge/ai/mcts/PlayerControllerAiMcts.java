@@ -39,11 +39,16 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public class PlayerControllerAiMcts extends PlayerController {
+    public static final int DEFAULT_ITERATION_BUDGET = 100;
+    public static final long DEFAULT_TIME_LIMIT_MS = 50;
+    public static final double DEFAULT_EXPLORATION_CONSTANT = 1.4;
+    public static final int DEFAULT_ROLLOUT_DEPTH = 2;
+
     private final MctsSearch search;
-    private int iterationBudget = 100;
-    private long timeLimitMs = 50;
-    private double explorationConstant = 1.4;
-    private int rolloutDepth = 2;
+    private int iterationBudget = DEFAULT_ITERATION_BUDGET;
+    private long timeLimitMs = DEFAULT_TIME_LIMIT_MS;
+    private double explorationConstant = DEFAULT_EXPLORATION_CONSTANT;
+    private int rolloutDepth = DEFAULT_ROLLOUT_DEPTH;
 
     public PlayerControllerAiMcts(Game game, Player player, LobbyPlayer lobbyPlayer) {
         super(game, player, lobbyPlayer);
@@ -606,9 +611,17 @@ public class PlayerControllerAiMcts extends PlayerController {
         applySearchSettings();
     }
 
+    public int getIterationBudget() {
+        return iterationBudget;
+    }
+
     public void setTimeLimitMs(long timeLimitMs) {
         this.timeLimitMs = timeLimitMs;
         applySearchSettings();
+    }
+
+    public long getTimeLimitMs() {
+        return timeLimitMs;
     }
 
     public void setExplorationConstant(double explorationConstant) {
@@ -616,9 +629,17 @@ public class PlayerControllerAiMcts extends PlayerController {
         applySearchSettings();
     }
 
+    public double getExplorationConstant() {
+        return explorationConstant;
+    }
+
     public void setRolloutDepth(int rolloutDepth) {
         this.rolloutDepth = rolloutDepth;
         applySearchSettings();
+    }
+
+    public int getRolloutDepth() {
+        return rolloutDepth;
     }
 
     private void applySearchSettings() {

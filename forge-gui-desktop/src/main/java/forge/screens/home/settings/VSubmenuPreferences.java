@@ -144,8 +144,13 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
     private final FComboBoxPanel<String> cbpSoundSets = new FComboBoxPanel<>(localizer.getMessage("cbpSoundSets")+":");
     private final FComboBoxPanel<String> cbpMusicSets = new FComboBoxPanel<>(localizer.getMessage("cbpMusicSets")+":");
     private final FComboBoxPanel<String> cbpAiProfiles = new FComboBoxPanel<>(localizer.getMessage("cbpAiProfiles")+":");
+    private final FComboBoxPanel<String> cbpAiType = new FComboBoxPanel<>(localizer.getMessage("cbpAiType")+":");
     private final FComboBoxPanel<String> cbpAiSideboardingMode = new FComboBoxPanel<>(localizer.getMessage("cbpAiSideboardingMode")+":");
     private final FComboBoxPanel<String> cbpAiTimeout = new FComboBoxPanel<>(localizer.getMessage("cbAITimeout")+":");
+    private final FComboBoxPanel<String> cbpAiMctsIterationBudget = new FComboBoxPanel<>(localizer.getMessage("cbpAiMctsIterationBudget")+":");
+    private final FComboBoxPanel<String> cbpAiMctsTimeLimitMs = new FComboBoxPanel<>(localizer.getMessage("cbpAiMctsTimeLimitMs")+":");
+    private final FComboBoxPanel<String> cbpAiMctsRolloutDepth = new FComboBoxPanel<>(localizer.getMessage("cbpAiMctsRolloutDepth")+":");
+    private final FComboBoxPanel<String> cbpAiMctsExplorationConstant = new FComboBoxPanel<>(localizer.getMessage("cbpAiMctsExplorationConstant")+":");
     private final FComboBoxPanel<String> cbpStackAdditions = new FComboBoxPanel<>(localizer.getMessage("cbpStackAdditions")+":");
     private final FComboBoxPanel<String> cbpLandPlayed = new FComboBoxPanel<>(localizer.getMessage("cbpLandPlayed")+":");
     private final FComboBoxPanel<String> cbpDisplayCurrentCardColors = new FComboBoxPanel<>(localizer.getMessage("cbpDisplayCurrentCardColors")+":");
@@ -220,6 +225,21 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
 
         pnlPrefs.add(cbpAiProfiles, comboBoxConstraints);
         pnlPrefs.add(new NoteLabel(localizer.getMessage("nlpAiProfiles")), descriptionConstraints);
+
+        pnlPrefs.add(cbpAiType, comboBoxConstraints);
+        pnlPrefs.add(new NoteLabel(localizer.getMessage("nlpAiType")), descriptionConstraints);
+
+        pnlPrefs.add(cbpAiMctsIterationBudget, comboBoxConstraints);
+        pnlPrefs.add(new NoteLabel(localizer.getMessage("nlpAiMctsIterationBudget")), descriptionConstraints);
+
+        pnlPrefs.add(cbpAiMctsTimeLimitMs, comboBoxConstraints);
+        pnlPrefs.add(new NoteLabel(localizer.getMessage("nlpAiMctsTimeLimitMs")), descriptionConstraints);
+
+        pnlPrefs.add(cbpAiMctsRolloutDepth, comboBoxConstraints);
+        pnlPrefs.add(new NoteLabel(localizer.getMessage("nlpAiMctsRolloutDepth")), descriptionConstraints);
+
+        pnlPrefs.add(cbpAiMctsExplorationConstant, comboBoxConstraints);
+        pnlPrefs.add(new NoteLabel(localizer.getMessage("nlpAiMctsExplorationConstant")), descriptionConstraints);
 
         pnlPrefs.add(cbAnte, titleConstraints);
         pnlPrefs.add(new NoteLabel(localizer.getMessage("nlAnte")), descriptionConstraints);
@@ -830,12 +850,32 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
         return cbpAiProfiles;
     }
 
+    public FComboBoxPanel<String> getAiTypeComboBoxPanel() {
+        return cbpAiType;
+    }
+
     public FComboBoxPanel<String> getAiSideboardingModeComboBoxPanel() {
         return cbpAiSideboardingMode;
     }
 
     public FComboBoxPanel<String> getAiTimeoutComboBox() {
         return cbpAiTimeout;
+    }
+
+    public FComboBoxPanel<String> getAiMctsIterationBudgetComboBoxPanel() {
+        return cbpAiMctsIterationBudget;
+    }
+
+    public FComboBoxPanel<String> getAiMctsTimeLimitMsComboBoxPanel() {
+        return cbpAiMctsTimeLimitMs;
+    }
+
+    public FComboBoxPanel<String> getAiMctsRolloutDepthComboBoxPanel() {
+        return cbpAiMctsRolloutDepth;
+    }
+
+    public FComboBoxPanel<String> getAiMctsExplorationConstantComboBoxPanel() {
+        return cbpAiMctsExplorationConstant;
     }
 
     public FComboBoxPanel<String> getCbpStackAdditionsComboBoxPanel() {

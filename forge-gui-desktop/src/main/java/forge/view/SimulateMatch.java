@@ -26,6 +26,7 @@ import forge.gamemodes.tournament.system.TournamentPlayer;
 import forge.gamemodes.tournament.system.TournamentRoundRobin;
 import forge.gamemodes.tournament.system.TournamentSwiss;
 import forge.localinstance.properties.ForgeConstants;
+import forge.localinstance.properties.ForgePreferences.FPref;
 import forge.model.FModel;
 import forge.player.GamePlayerUtil;
 import forge.util.Lang;
@@ -99,6 +100,22 @@ public class SimulateMatch {
             return;
         }
 
+        if (params.containsKey("ai")) {
+            FModel.getPreferences().setPref(FPref.UI_AI_TYPE, params.get("ai").get(0));
+        }
+        if (params.containsKey("mctsIterations")) {
+            FModel.getPreferences().setPref(FPref.AI_MCTS_ITERATION_BUDGET, params.get("mctsIterations").get(0));
+        }
+        if (params.containsKey("mctsTimeMs")) {
+            FModel.getPreferences().setPref(FPref.AI_MCTS_TIME_LIMIT_MS, params.get("mctsTimeMs").get(0));
+        }
+        if (params.containsKey("mctsRolloutDepth")) {
+            FModel.getPreferences().setPref(FPref.AI_MCTS_ROLLOUT_DEPTH, params.get("mctsRolloutDepth").get(0));
+        }
+        if (params.containsKey("mctsExplorationConstant")) {
+            FModel.getPreferences().setPref(FPref.AI_MCTS_EXPLORATION_CONSTANT, params.get("mctsExplorationConstant").get(0));
+        }
+
         List<RegisteredPlayer> pp = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
 
@@ -157,7 +174,7 @@ public class SimulateMatch {
     }
 
     private static void argumentHelp() {
-        System.out.println("Syntax: forge.exe sim -d <deck1[.dck]> ... <deckX[.dck]> -D [D] -n [N] -m [M] -t [T] -p [P] -f [F] -q");
+        System.out.println("Syntax: forge.exe sim -d <deck1[.dck]> ... <deckX[.dck]> -D [D] -n [N] -m [M] -t [T] -p [P] -f [F] -ai [AI_TYPE] -mctsIterations [N] -mctsTimeMs [MS] -mctsRolloutDepth [N] -mctsExplorationConstant [FLOAT] -q");
         System.out.println("\tsim - stands for simulation mode");
         System.out.println("\tdeck1 (or deck2,...,X) - constructed deck name or filename (has to be quoted when contains multiple words)");
         System.out.println("\tdeck is treated as file if it ends with a dot followed by three numbers or letters");
@@ -168,6 +185,11 @@ public class SimulateMatch {
         System.out.println("\tP - Amount of players per match (used only with Tournaments, defaults to 2)");
         System.out.println("\tF - format of games, defaults to constructed");
         System.out.println("\tc - Clock flag. Set the maximum time in seconds before calling the match a draw, defaults to 120.");
+        System.out.println("\tai - AI type (Simple, Advanced (FSM), MCTS, Neural).");
+        System.out.println("\tmctsIterations - MCTS iteration budget (used when AI type is MCTS).");
+        System.out.println("\tmctsTimeMs - MCTS time limit in milliseconds (used when AI type is MCTS).");
+        System.out.println("\tmctsRolloutDepth - MCTS rollout depth (used when AI type is MCTS).");
+        System.out.println("\tmctsExplorationConstant - MCTS exploration constant (used when AI type is MCTS).");
         System.out.println("\tq - Quiet flag. Output just the game result, not the entire game log.");
     }
 

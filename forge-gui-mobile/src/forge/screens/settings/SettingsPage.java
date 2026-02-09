@@ -8,6 +8,7 @@ import forge.MulliganDefs;
 import forge.StaticData;
 import forge.adventure.util.Config;
 import forge.ai.AiProfileUtil;
+import forge.ai.AiType;
 import forge.assets.*;
 import forge.game.GameLogEntryType;
 import forge.gui.GuiBase;
@@ -184,6 +185,10 @@ public class SettingsPage extends TabPage<SettingsScreen> {
             Forge.getLocalizer().getMessage("cbpAiProfiles"),
             Forge.getLocalizer().getMessage("nlpAiProfiles"),
             AiProfileUtil.getProfilesArray()), 1);
+        lstSettings.addItem(new CustomSelectSetting(FPref.UI_AI_TYPE,
+            Forge.getLocalizer().getMessage("cbpAiType"),
+            Forge.getLocalizer().getMessage("nlpAiType"),
+            AiType.getDisplayNames()), 1);
         lstSettings.addItem(new BooleanSetting(FPref.UI_ANTE,
             Forge.getLocalizer().getMessage("cbAnte"),
             Forge.getLocalizer().getMessage("nlAnte")), 1);
@@ -227,6 +232,22 @@ public class SettingsPage extends TabPage<SettingsScreen> {
         lstSettings.addItem(new CustomSelectSetting(FPref.MATCH_AI_TIMEOUT, Forge.getLocalizer().getMessage("cbAITimeout"),
             Forge.getLocalizer().getMessage("nlAITimeout"),
             Lists.newArrayList("5", "10", "60", "120", "240", "300", "600")), 1);
+        lstSettings.addItem(new CustomSelectSetting(FPref.AI_MCTS_ITERATION_BUDGET,
+            Forge.getLocalizer().getMessage("cbpAiMctsIterationBudget"),
+            Forge.getLocalizer().getMessage("nlpAiMctsIterationBudget"),
+            Lists.newArrayList("50", "100", "200", "500", "1000")), 1);
+        lstSettings.addItem(new CustomSelectSetting(FPref.AI_MCTS_TIME_LIMIT_MS,
+            Forge.getLocalizer().getMessage("cbpAiMctsTimeLimitMs"),
+            Forge.getLocalizer().getMessage("nlpAiMctsTimeLimitMs"),
+            Lists.newArrayList("10", "25", "50", "100", "250", "500", "1000")), 1);
+        lstSettings.addItem(new CustomSelectSetting(FPref.AI_MCTS_ROLLOUT_DEPTH,
+            Forge.getLocalizer().getMessage("cbpAiMctsRolloutDepth"),
+            Forge.getLocalizer().getMessage("nlpAiMctsRolloutDepth"),
+            Lists.newArrayList("1", "2", "3", "4", "5", "8")), 1);
+        lstSettings.addItem(new CustomSelectSetting(FPref.AI_MCTS_EXPLORATION_CONSTANT,
+            Forge.getLocalizer().getMessage("cbpAiMctsExplorationConstant"),
+            Forge.getLocalizer().getMessage("nlpAiMctsExplorationConstant"),
+            Lists.newArrayList("0.5", "0.7", "1.0", "1.4", "2.0")), 1);
         lstSettings.addItem(new BooleanSetting(FPref.UI_ORDER_HAND,
             Forge.getLocalizer().getMessage("cbOrderHand"),
             Forge.getLocalizer().getMessage("nlOrderHand")), 1);
