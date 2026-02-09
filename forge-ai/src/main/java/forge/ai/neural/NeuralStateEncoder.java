@@ -2,7 +2,6 @@ package forge.ai.neural;
 
 import forge.ai.neural.schema.NeuralFeatureSchema;
 import forge.card.MagicColor;
-import forge.card.mana.ManaAtom;
 import forge.game.Game;
 import forge.game.card.Card;
 import forge.game.card.CardCollectionView;
