@@ -4,7 +4,6 @@ import forge.MulliganDefs;
 import forge.Singletons;
 import forge.StaticData;
 import forge.ai.AiProfileUtil;
-import forge.ai.AiType;
 import forge.control.FControl.CloseAction;
 import forge.download.AutoUpdater;
 import forge.game.GameLogEntryType;
@@ -217,7 +216,6 @@ public enum CSubmenuPreferences implements ICDoc {
         initializeServerUPnPComboBox();
         initializeMulliganRuleComboBox();
         initializeAiProfilesComboBox();
-        initializeAiTypeComboBox();
         initializeAiSideboardingModeComboBox();
         initializeAiTimeoutComboBox();
         initializeAiMctsIterationBudgetComboBox();
@@ -446,15 +444,6 @@ public enum CSubmenuPreferences implements ICDoc {
         final FComboBoxPanel<String> panel = this.view.getAiProfilesComboBoxPanel();
         final FComboBox<String> comboBox = createComboBox(AiProfileUtil.getProfilesArray(), userSetting);
         final String selectedItem = this.prefs.getPref(userSetting);
-        panel.setComboBox(comboBox, selectedItem);
-    }
-
-    private void initializeAiTypeComboBox() {
-        final FPref userSetting = FPref.UI_AI_TYPE;
-        final FComboBoxPanel<String> panel = this.view.getAiTypeComboBoxPanel();
-        final String selectedItem = this.prefs.getPref(userSetting);
-        final String[] choices = withCurrentValue(AiType.getDisplayNames(), selectedItem);
-        final FComboBox<String> comboBox = createComboBox(choices, userSetting);
         panel.setComboBox(comboBox, selectedItem);
     }
 

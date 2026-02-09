@@ -3,7 +3,6 @@ package forge.player;
 import forge.LobbyPlayer;
 import forge.ai.AIOption;
 import forge.ai.AiProfileUtil;
-import forge.ai.AiType;
 import forge.ai.mcts.LobbyPlayerAiMctsFactory;
 import forge.ai.mcts.PlayerControllerAiMcts;
 import forge.ai.neural.LobbyPlayerAiNeuralFactory;
@@ -72,67 +71,38 @@ public final class GamePlayerUtil {
         return createAiPlayer(name, avatarIndex, sleeveIndex, options, "");
     }
     public static LobbyPlayer createAiPlayer(final String name, final int avatarIndex, final int sleeveIndex, final Set<AIOption> options, final String profileOverride) {
-        final AiType aiType = getPreferredAiType();
-        final LobbyPlayer player = createAiPlayerByType(aiType, name, options);
+        String profile = resolveAiProfile(profileOverride);
+        LobbyPlayer player = createAiPlayerForProfile(profile, name, options);
 
         if (player instanceof LobbyPlayerAiAdvancedFsmFactory || player instanceof LobbyPlayerAiSimpleFactory) {
             // TODO: implement specific AI profiles for quest mode.
-            String profile = "";
-            if (profileOverride == null || profileOverride.isEmpty()) {
-                String lastProfileChosen = FModel.getPreferences().getPref(FPref.UI_CURRENT_AI_PROFILE);
-                if (!AiProfileUtil.getProfilesDisplayList().contains(lastProfileChosen)) {
-                    System.out.println("[AI Preferences] Unknown profile " + lastProfileChosen + " was requested, resetting to default.");
-                    lastProfileChosen = "Default";
-                    FModel.getPreferences().setPref(FPref.UI_CURRENT_AI_PROFILE, "Default");
-                    FModel.getPreferences().save();
-                }
-                boolean rotateProfile = lastProfileChosen.equals(AiProfileUtil.AI_PROFILE_RANDOM_DUEL);
-                if (player instanceof LobbyPlayerAiAdvancedFsmFactory advancedPlayer) {
-                    advancedPlayer.setRotateProfileEachGame(rotateProfile);
-                } else {
-                    ((LobbyPlayerAiSimpleFactory) player).setRotateProfileEachGame(rotateProfile);
-                }
-                if (lastProfileChosen.equals(AiProfileUtil.AI_PROFILE_RANDOM_MATCH)) {
-                    lastProfileChosen = AiProfileUtil.getRandomProfile();
-                }
-                profile = lastProfileChosen;
-            } else {
-                profile = profileOverride;
+            String resolvedProfile = profile;
+            if (profile.equals(AiProfileUtil.AI_PROFILE_ADVANCED_FSM)) {
+                resolvedProfile = "Default";
+            } else if (profile.equals(AiProfileUtil.AI_PROFILE_RANDOM_MATCH)) {
+                resolvedProfile = AiProfileUtil.getRandomProfile();
             }
 
-            assert (!profile.isEmpty()); // TODO test instead of assert
-
-            System.out.println("[AI Preferences] using profile " + profile);
+            boolean rotateProfile = profile.equals(AiProfileUtil.AI_PROFILE_RANDOM_DUEL);
             if (player instanceof LobbyPlayerAiAdvancedFsmFactory advancedPlayer) {
-                advancedPlayer.setAiProfile(profile);
+                advancedPlayer.setRotateProfileEachGame(rotateProfile);
             } else {
-                ((LobbyPlayerAiSimpleFactory) player).setAiProfile(profile);
+                ((LobbyPlayerAiSimpleFactory) player).setRotateProfileEachGame(rotateProfile);
+            }
+
+            assert (!resolvedProfile.isEmpty()); // TODO test instead of assert
+
+            System.out.println("[AI Preferences] using profile " + resolvedProfile);
+            if (player instanceof LobbyPlayerAiAdvancedFsmFactory advancedPlayer) {
+                advancedPlayer.setAiProfile(resolvedProfile);
+            } else {
+                ((LobbyPlayerAiSimpleFactory) player).setAiProfile(resolvedProfile);
             }
         }
 
         player.setAvatarIndex(avatarIndex);
         player.setSleeveIndex(sleeveIndex);
         return player;
-    }
-
-    private static AiType getPreferredAiType() {
-        String aiTypePref = FModel.getPreferences().getPref(FPref.UI_AI_TYPE);
-        if (!AiType.isKnownPreference(aiTypePref)) {
-            System.out.println("[AI Preferences] Unknown AI type " + aiTypePref + " was requested, resetting to default.");
-            aiTypePref = AiType.SIMPLE.getDisplayName();
-            FModel.getPreferences().setPref(FPref.UI_AI_TYPE, aiTypePref);
-            FModel.getPreferences().save();
-        }
-        return AiType.fromPreference(aiTypePref);
-    }
-
-    private static LobbyPlayer createAiPlayerByType(AiType aiType, String name, Set<AIOption> options) {
-        return switch (aiType) {
-            case ADVANCED_FSM -> new LobbyPlayerAiAdvancedFsmFactory(name, options);
-            case MCTS -> createMctsAiPlayer(name, options);
-            case NEURAL -> new LobbyPlayerAiNeuralFactory(name, options);
-            case SIMPLE -> new LobbyPlayerAiSimpleFactory(name, options);
-        };
     }
 
     private static LobbyPlayerAiMctsFactory createMctsAiPlayer(String name, Set<AIOption> options) {
@@ -143,6 +113,30 @@ public final class GamePlayerUtil {
                 FModel.getPreferences().getPref(FPref.AI_MCTS_EXPLORATION_CONSTANT),
                 PlayerControllerAiMcts.DEFAULT_EXPLORATION_CONSTANT);
         return new LobbyPlayerAiMctsFactory(name, options, iterationBudget, timeLimitMs, rolloutDepth, explorationConstant);
+    }
+
+    private static LobbyPlayer createAiPlayerForProfile(String profile, String name, Set<AIOption> options) {
+        return switch (profile) {
+            case AiProfileUtil.AI_PROFILE_SIMPLE -> new LobbyPlayerAiSimpleFactory(name, options);
+            case AiProfileUtil.AI_PROFILE_MCTS -> createMctsAiPlayer(name, options);
+            case AiProfileUtil.AI_PROFILE_NEURAL -> new LobbyPlayerAiNeuralFactory(name, options);
+            case AiProfileUtil.AI_PROFILE_ADVANCED_FSM -> new LobbyPlayerAiAdvancedFsmFactory(name, options);
+            default -> new LobbyPlayerAiAdvancedFsmFactory(name, options);
+        };
+    }
+
+    private static String resolveAiProfile(String profileOverride) {
+        String profile = profileOverride == null ? "" : profileOverride;
+        if (profile.isEmpty()) {
+            profile = FModel.getPreferences().getPref(FPref.UI_CURRENT_AI_PROFILE);
+        }
+        if (!AiProfileUtil.getProfilesDisplayList().contains(profile)) {
+            System.out.println("[AI Preferences] Unknown profile " + profile + " was requested, resetting to default.");
+            profile = "Default";
+            FModel.getPreferences().setPref(FPref.UI_CURRENT_AI_PROFILE, "Default");
+            FModel.getPreferences().save();
+        }
+        return profile;
     }
 
     private static double parseDoublePref(String value, double defaultValue) {

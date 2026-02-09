@@ -8,7 +8,6 @@ import forge.MulliganDefs;
 import forge.StaticData;
 import forge.adventure.util.Config;
 import forge.ai.AiProfileUtil;
-import forge.ai.AiType;
 import forge.assets.*;
 import forge.game.GameLogEntryType;
 import forge.gui.GuiBase;
@@ -185,10 +184,6 @@ public class SettingsPage extends TabPage<SettingsScreen> {
             Forge.getLocalizer().getMessage("cbpAiProfiles"),
             Forge.getLocalizer().getMessage("nlpAiProfiles"),
             AiProfileUtil.getProfilesArray()), 1);
-        lstSettings.addItem(new CustomSelectSetting(FPref.UI_AI_TYPE,
-            Forge.getLocalizer().getMessage("cbpAiType"),
-            Forge.getLocalizer().getMessage("nlpAiType"),
-            AiType.getDisplayNames()), 1);
         lstSettings.addItem(new BooleanSetting(FPref.UI_ANTE,
             Forge.getLocalizer().getMessage("cbAnte"),
             Forge.getLocalizer().getMessage("nlAnte")), 1);

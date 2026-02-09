@@ -18,7 +18,6 @@
 package forge.localinstance.properties;
 
 import forge.MulliganDefs;
-import forge.ai.AiType;
 import forge.game.GameLogEntryType;
 
 public class ForgePreferences extends PreferencesStore<ForgePreferences.FPref> {
@@ -128,7 +127,6 @@ public class ForgePreferences extends PreferencesStore<ForgePreferences.FPref> {
         UI_CURRENT_SOUND_SET("Default"),
         UI_CURRENT_MUSIC_SET("Default"),
         UI_CURRENT_AI_PROFILE ("Default"),
-        UI_AI_TYPE (AiType.SIMPLE.getDisplayName()),
         UI_CLONE_MODE_SOURCE ("false"),
         UI_MATCH_IMAGE_VISIBLE ("true"),
         UI_THEMED_COMBOBOX ("true"), // Now applies to all theme settings, not just Combo.

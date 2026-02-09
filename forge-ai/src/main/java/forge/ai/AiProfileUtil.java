@@ -47,6 +47,10 @@ public class AiProfileUtil {
 
     public static final String AI_PROFILE_RANDOM_MATCH = "Random (Every Match)";
     public static final String AI_PROFILE_RANDOM_DUEL = "Random (Every Game)";
+    public static final String AI_PROFILE_SIMPLE = "Simple";
+    public static final String AI_PROFILE_ADVANCED_FSM = "Advanced (FSM)";
+    public static final String AI_PROFILE_MCTS = "MCTS";
+    public static final String AI_PROFILE_NEURAL = "Neural";
 
     public enum AISideboardingMode {
         Off,
@@ -160,6 +164,10 @@ public class AiProfileUtil {
     public static List<String> getAvailableProfiles() {
         final List<String> availableProfiles = new ArrayList<>();
 
+        if (AI_PROFILE_DIR == null) {
+            return availableProfiles;
+        }
+
         final File dir = new File(AI_PROFILE_DIR);
         final String[] children = dir.list();
         if (children == null) {
@@ -183,6 +191,10 @@ public class AiProfileUtil {
      */
     public static List<String> getProfilesDisplayList() {
         final List<String> availableProfiles = new ArrayList<>();
+        availableProfiles.add(AI_PROFILE_SIMPLE);
+        availableProfiles.add(AI_PROFILE_ADVANCED_FSM);
+        availableProfiles.add(AI_PROFILE_MCTS);
+        availableProfiles.add(AI_PROFILE_NEURAL);
         availableProfiles.add(AI_PROFILE_RANDOM_MATCH);
         availableProfiles.add(AI_PROFILE_RANDOM_DUEL);
         availableProfiles.addAll(getAvailableProfiles());
