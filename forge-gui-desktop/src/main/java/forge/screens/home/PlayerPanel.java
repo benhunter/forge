@@ -537,7 +537,7 @@ public class PlayerPanel extends FPanel {
      */
     private void populateAiPickerComboBox() {
         aiPickerComboBox.removeAllItems();
-        final List<String> aiProfiles = AiProfileUtil.getAvailableProfiles();
+        final List<String> aiProfiles = AiProfileUtil.getProfilesDisplayList();
         for (final String profile : aiProfiles) {
             aiPickerComboBox.addItem(profile);
         }

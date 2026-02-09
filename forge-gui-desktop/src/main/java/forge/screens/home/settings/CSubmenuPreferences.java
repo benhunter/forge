@@ -36,6 +36,7 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -217,6 +218,10 @@ public enum CSubmenuPreferences implements ICDoc {
         initializeAiProfilesComboBox();
         initializeAiSideboardingModeComboBox();
         initializeAiTimeoutComboBox();
+        initializeAiMctsIterationBudgetComboBox();
+        initializeAiMctsTimeLimitMsComboBox();
+        initializeAiMctsRolloutDepthComboBox();
+        initializeAiMctsExplorationConstantComboBox();
         initializeSoundSetsComboBox();
         initializeMusicSetsComboBox();
         initializeStackAdditionsComboBox();
@@ -459,6 +464,42 @@ public enum CSubmenuPreferences implements ICDoc {
         panel.setComboBox(comboBox, selectedItem);
     }
 
+    private void initializeAiMctsIterationBudgetComboBox() {
+        final FPref userSetting = FPref.AI_MCTS_ITERATION_BUDGET;
+        final FComboBoxPanel<String> panel = this.view.getAiMctsIterationBudgetComboBoxPanel();
+        final String selectedItem = this.prefs.getPref(userSetting);
+        final String[] choices = withCurrentValue(new String[] {"50", "100", "200", "500", "1000"}, selectedItem);
+        final FComboBox<String> comboBox = createComboBox(choices, userSetting);
+        panel.setComboBox(comboBox, selectedItem);
+    }
+
+    private void initializeAiMctsTimeLimitMsComboBox() {
+        final FPref userSetting = FPref.AI_MCTS_TIME_LIMIT_MS;
+        final FComboBoxPanel<String> panel = this.view.getAiMctsTimeLimitMsComboBoxPanel();
+        final String selectedItem = this.prefs.getPref(userSetting);
+        final String[] choices = withCurrentValue(new String[] {"10", "25", "50", "100", "250", "500", "1000"}, selectedItem);
+        final FComboBox<String> comboBox = createComboBox(choices, userSetting);
+        panel.setComboBox(comboBox, selectedItem);
+    }
+
+    private void initializeAiMctsRolloutDepthComboBox() {
+        final FPref userSetting = FPref.AI_MCTS_ROLLOUT_DEPTH;
+        final FComboBoxPanel<String> panel = this.view.getAiMctsRolloutDepthComboBoxPanel();
+        final String selectedItem = this.prefs.getPref(userSetting);
+        final String[] choices = withCurrentValue(new String[] {"1", "2", "3", "4", "5", "8"}, selectedItem);
+        final FComboBox<String> comboBox = createComboBox(choices, userSetting);
+        panel.setComboBox(comboBox, selectedItem);
+    }
+
+    private void initializeAiMctsExplorationConstantComboBox() {
+        final FPref userSetting = FPref.AI_MCTS_EXPLORATION_CONSTANT;
+        final FComboBoxPanel<String> panel = this.view.getAiMctsExplorationConstantComboBoxPanel();
+        final String selectedItem = this.prefs.getPref(userSetting);
+        final String[] choices = withCurrentValue(new String[] {"0.5", "0.7", "1.0", "1.4", "2.0"}, selectedItem);
+        final FComboBox<String> comboBox = createComboBox(choices, userSetting);
+        panel.setComboBox(comboBox, selectedItem);
+    }
+
     private void initializeSoundSetsComboBox() {
         final FPref userSetting = FPref.UI_CURRENT_SOUND_SET;
         final FComboBoxPanel<String> panel = this.view.getSoundSetsComboBoxPanel();
@@ -617,6 +658,20 @@ public enum CSubmenuPreferences implements ICDoc {
         final FComboBox<E> comboBox = new FComboBox<>(items);
         addComboBoxListener(comboBox, setting);
         return comboBox;
+    }
+
+    private String[] withCurrentValue(String[] items, String currentValue) {
+        if (currentValue == null || currentValue.isEmpty()) {
+            return items;
+        }
+        for (String item : items) {
+            if (item.equals(currentValue)) {
+                return items;
+            }
+        }
+        String[] extended = Arrays.copyOf(items, items.length + 1);
+        extended[items.length] = currentValue;
+        return extended;
     }
 
     private <E> FComboBox<E> createLocalizedComboBox(
