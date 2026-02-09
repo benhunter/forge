@@ -37,7 +37,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-
+/**
+ * AI player controller using Monte Carlo Tree Search (MCTS).
+ *
+ * <p>Configurable parameters:
+ * <ul>
+ *   <li>iterationBudget - maximum number of MCTS iterations</li>
+ *   <li>timeLimitMs - maximum search time in milliseconds</li>
+ *   <li>explorationConstant - exploration factor for UCT</li>
+ *   <li>rolloutDepth - depth of rollout simulations</li>
+ * </ul>
+ *
+ * Delegates decision-making to {@link MctsSearch}.
+ */
 public class PlayerControllerAiMcts extends PlayerController {
     public static final int DEFAULT_ITERATION_BUDGET = 100;
     public static final long DEFAULT_TIME_LIMIT_MS = 50;
