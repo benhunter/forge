@@ -48,7 +48,6 @@ public class AiProfileUtil {
     public static final String AI_PROFILE_RANDOM_MATCH = "Random (Every Match)";
     public static final String AI_PROFILE_RANDOM_DUEL = "Random (Every Game)";
     public static final String AI_PROFILE_SIMPLE = "Simple";
-    public static final String AI_PROFILE_ADVANCED_FSM = "Advanced (FSM)";
     public static final String AI_PROFILE_MCTS = "MCTS";
     public static final String AI_PROFILE_NEURAL = "Neural";
 
@@ -192,7 +191,6 @@ public class AiProfileUtil {
     public static List<String> getProfilesDisplayList() {
         final List<String> availableProfiles = new ArrayList<>();
         availableProfiles.add(AI_PROFILE_SIMPLE);
-        availableProfiles.add(AI_PROFILE_ADVANCED_FSM);
         availableProfiles.add(AI_PROFILE_MCTS);
         availableProfiles.add(AI_PROFILE_NEURAL);
         availableProfiles.add(AI_PROFILE_RANDOM_MATCH);

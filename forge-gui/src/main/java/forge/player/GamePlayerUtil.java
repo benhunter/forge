@@ -77,9 +77,7 @@ public final class GamePlayerUtil {
         if (player instanceof LobbyPlayerAiAdvancedFsmFactory || player instanceof LobbyPlayerAiSimpleFactory) {
             // TODO: implement specific AI profiles for quest mode.
             String resolvedProfile = profile;
-            if (profile.equals(AiProfileUtil.AI_PROFILE_ADVANCED_FSM)) {
-                resolvedProfile = "Default";
-            } else if (profile.equals(AiProfileUtil.AI_PROFILE_RANDOM_MATCH)) {
+            if (profile.equals(AiProfileUtil.AI_PROFILE_RANDOM_MATCH)) {
                 resolvedProfile = AiProfileUtil.getRandomProfile();
             }
 
@@ -120,7 +118,6 @@ public final class GamePlayerUtil {
             case AiProfileUtil.AI_PROFILE_SIMPLE -> new LobbyPlayerAiSimpleFactory(name, options);
             case AiProfileUtil.AI_PROFILE_MCTS -> createMctsAiPlayer(name, options);
             case AiProfileUtil.AI_PROFILE_NEURAL -> new LobbyPlayerAiNeuralFactory(name, options);
-            case AiProfileUtil.AI_PROFILE_ADVANCED_FSM -> new LobbyPlayerAiAdvancedFsmFactory(name, options);
             default -> new LobbyPlayerAiAdvancedFsmFactory(name, options);
         };
     }

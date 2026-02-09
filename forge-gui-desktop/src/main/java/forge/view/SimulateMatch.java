@@ -185,7 +185,7 @@ public class SimulateMatch {
         System.out.println("\tP - Amount of players per match (used only with Tournaments, defaults to 2)");
         System.out.println("\tF - format of games, defaults to constructed");
         System.out.println("\tc - Clock flag. Set the maximum time in seconds before calling the match a draw, defaults to 120.");
-        System.out.println("\tai - AI personality/profile (includes Simple, Advanced (FSM), MCTS, Neural).");
+        System.out.println("\tai - AI personality/profile (includes Simple, MCTS, Neural, plus profiles in the ai directory).");
         System.out.println("\tmctsIterations - MCTS iteration budget (used when AI type is MCTS).");
         System.out.println("\tmctsTimeMs - MCTS time limit in milliseconds (used when AI type is MCTS).");
         System.out.println("\tmctsRolloutDepth - MCTS rollout depth (used when AI type is MCTS).");

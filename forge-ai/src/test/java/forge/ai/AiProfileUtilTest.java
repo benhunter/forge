@@ -11,7 +11,6 @@ public class AiProfileUtilTest {
     public void profilesDisplayList_includesEngineProfiles() {
         List<String> profiles = AiProfileUtil.getProfilesDisplayList();
         assertTrue(profiles.contains(AiProfileUtil.AI_PROFILE_SIMPLE));
-        assertTrue(profiles.contains(AiProfileUtil.AI_PROFILE_ADVANCED_FSM));
         assertTrue(profiles.contains(AiProfileUtil.AI_PROFILE_MCTS));
         assertTrue(profiles.contains(AiProfileUtil.AI_PROFILE_NEURAL));
     }
